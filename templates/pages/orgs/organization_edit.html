@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load pages_tags mezzanine_tags %}
+
+{% block main %}
+
+
+    <div>
+        <p style="text-align:justify;">
+         <span>Name:</span>  {% editable  organization.name  %}
+            {{ organization.name|truncatewords_html:50 }}
+        {% endeditable %}
+
+        </p>
+         <p>   <span>Type:</span> {% editable  organization.organizationType  %}
+            {{ organization.organizationType }}
+             </p>
+        {% endeditable %}
+        <p>
+             <span>Url:</span>  {% editable  organization.url  %}
+            {{ organization.url }}
+        {% endeditable %}
+    </p>
+    <p>
+         <span>Description:</span>      {% editable  organization.notes  %}
+            {{ organization.notes }}
+        {% endeditable %}
+    </p>
+    </div>
+
+
+    {% editable_loader %}
+{% endblock %}

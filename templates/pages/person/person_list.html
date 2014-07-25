@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h2>person</h2>
+    <ul>
+        {% for person in object_list %}
+            <li><a href="{%   url 'person_edit' person.pk %}">edit</a>
+                {{ person.name }} ( {{ person.givenName }} {{ person.familyName }} ) of {{ person.primaryOrganizationName }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

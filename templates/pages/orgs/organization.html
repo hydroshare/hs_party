@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load pages_tags mezzanine_tags %}
+
+{% block main %}
+
+ <div>
+        <p style="text-align:justify;">
+
+       <span>Name:</span>     {{ organization.name|truncatewords_html:50 }}
+
+
+        </p>
+         <p>
+          <span>Organization Type:</span>   {{ organization.organizationType }}
+             </p>
+
+        <p>
+
+         <span>URL:</span>    {{ organization.url }}
+
+    </p>
+    <p>
+
+         <span>Description:</span>    {{ organization.notes }}
+
+    </p>
+
+    </div>
+
+
+{% endblock %}

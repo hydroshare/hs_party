@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load  pages_tags mezzanine_tags %}
+
+{% block main %}
+<h1>PERSON</h1>
+
+   <div class='row'>
+
+{{  person.name.html_name }}:
+       {{ person.name }}
+
+   </div>
+
+<ul>
+{% for org in person.organizations.all %}
+   <li>Org: {{ org.name }}<br/>
+       {{ org.organizationType }} <br/>
+
+   </li>
+{% endfor %}
+</ul>
+{% endblock %}

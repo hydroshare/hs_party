@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load  pages_tags mezzanine_tags %}
+
+{% block main %}
+<h1>New Organization</h1>
+
+
+<form enctype="multipart/form-data" method="post" action="">
+
+    {% csrf_token %}
+ <fieldset class="model">
+     {%  fields_for form %}
+     </fieldset>
+
+<input type="submit"/>
+</form>
+
+
+{% endblock %}

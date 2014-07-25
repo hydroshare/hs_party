@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load  pages_tags mezzanine_tags %}
+
+{% block main %}
+<h1>PERSON</h1>
+
+   <div class='row'>
+{% editable person %}
+
+       {{ person.name }}
+       {{ person.familyName }}
+       {{ person.givenName }}
+   {% endeditable %}
+
+   </div>
+
+{% endblock %}

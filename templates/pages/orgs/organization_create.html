@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load  pages_tags mezzanine_tags %}
+
+{% block main %}
+<h1>PERSON</h1>
+
+
+<form enctype="multipart/form-data" method="post" action="">
+<table>
+    {% csrf_token %}
+    {{  form }}
+</table>
+
+<input type="submit"/>
+</form>
+
+
+{% endblock %}
