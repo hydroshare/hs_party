@@ -2,14 +2,15 @@
 {% load  pages_tags mezzanine_tags %}
 
 {% block main %}
-<h1>PERSON</h1>
+<h1>New Organization</h1>
 
 
 <form enctype="multipart/form-data" method="post" action="">
-<table>
+
     {% csrf_token %}
-    {{  form }}
-</table>
+ <fieldset class="model">
+     {%  fields_for form %}
+     </fieldset>
 
 <input type="submit"/>
 </form>

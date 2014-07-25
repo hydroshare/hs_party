@@ -1,7 +1,7 @@
 [
     {
         "pk": "100",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
 
             "code":"faculty",
@@ -12,7 +12,7 @@
     },
       {
         "pk": "101",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"research",
             "name": "University Professional or Research Staff",
@@ -22,7 +22,7 @@
     },
       {
         "pk": "102",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"postdoc",
             "name": "Post-Doctoral Fellow",
@@ -32,7 +32,7 @@
     },
       {
         "code": "103",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"grad",
             "name": "University Graduate Student",
@@ -42,7 +42,7 @@
     },
       {
         "pk": "104",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"undergrad",
             "name": "University Undergraduate Student",
@@ -53,7 +53,7 @@
     ,
       {
         "pk": "105",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"commercial",
             "name": "Commercial/Professional",
@@ -64,7 +64,7 @@
         ,
       {
         "pk": "106",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"nonprofit",
             "name": "Non-profit Organizations",
@@ -74,7 +74,7 @@
     }      ,
       {
         "pk": "107",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
 
             "code":"k12",
@@ -86,7 +86,7 @@
           ,
       {
         "pk": "108",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"ccfaculty",
             "name": "Community College Faculty",
@@ -96,7 +96,7 @@
     }     ,
       {
         "pk": "109",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"ccstudent",
             "name": "Community College Student",
@@ -107,7 +107,7 @@
          ,
       {
         "pk": "110",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"other",
             "name": "other",
@@ -118,7 +118,7 @@
          ,
       {
         "pk": "111",
-        "model": "hs_scholar_profile.UserType",
+        "model": "hs_party.UserType",
         "fields": {
             "code":"Unspecified",
             "name": "Unspecified",
@@ -129,18 +129,98 @@
         ,
       {
         "pk": "200",
-        "model": "hs_scholar_profile.OrganizationType",
+        "model": "hs_party.OrganizationType",
         "fields": {
             "code":"other",
             "name": "other",
             "order": "1"
 
         }
+    },
+      {
+        "pk": "201",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"commercial",
+            "name": "Commercial/Professional",
+            "order": "2"
+
+        }
+    } ,
+      {
+        "pk": "202",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"university",
+            "name": "University",
+            "order": "3"
+
+        }
+    } ,
+      {
+        "pk": "203",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"college",
+            "name": "College",
+            "order": "4"
+
+        }
+    } ,
+      {
+        "pk": "204",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"gov",
+            "name": "Government Organization",
+            "order": "5"
+
+        }
+    } ,
+      {
+        "pk": "205",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"nonprofit",
+            "name": "Non-profit Organization",
+            "order": "6"
+
+        }
+    } ,
+      {
+        "pk": "206",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"k12",
+            "name": "School  Kindergarten to 12th Grade",
+            "order": "7"
+
+        }
+    },
+      {
+        "pk": "207",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"cc",
+            "name": "Community College",
+            "order": "7"
+
+        }
+    },
+      {
+        "pk": "208",
+        "model": "hs_party.OrganizationType",
+        "fields": {
+            "code":"unspecified",
+            "name": "Unspecified",
+            "order": "9"
+
+        }
     }
        ,
       {
         "pk": "300",
-        "model": "hs_scholar_profile.AddressType",
+        "model": "hs_party.AddressType",
         "fields": {
             "code":"other",
             "name": "other",
@@ -150,7 +230,7 @@
     },
     {
         "pk": "301",
-        "model": "hs_scholar_profile.AddressType",
+        "model": "hs_party.AddressType",
         "fields": {
             "code":"home",
             "name": "home",
@@ -160,7 +240,7 @@
     },
     {
         "pk": "302",
-        "model": "hs_scholar_profile.AddressType",
+        "model": "hs_party.AddressType",
         "fields": {
             "code":"work",
             "name": "work",
@@ -171,7 +251,7 @@
     ,
     {
         "pk": "303",
-        "model": "hs_scholar_profile.AddressType",
+        "model": "hs_party.AddressType",
         "fields": {
             "code":"mailing",
             "name": "mailing",
@@ -182,7 +262,7 @@
     ,
       {
         "pk": "400",
-        "model": "hs_scholar_profile.PhoneType",
+        "model": "hs_party.PhoneType",
         "fields": {
             "code":"other",
             "name": "other",
@@ -191,7 +271,7 @@
         }
     }  , {
         "pk": "401",
-        "model": "hs_scholar_profile.PhoneType",
+        "model": "hs_party.PhoneType",
         "fields": {
             "code":"work",
             "name": "work",
@@ -200,7 +280,7 @@
         }
     } ,  {
         "pk": "402",
-        "model": "hs_scholar_profile.PhoneType",
+        "model": "hs_party.PhoneType",
         "fields": {
             "code":"cell",
             "name": "cell",
@@ -210,7 +290,7 @@
     } ,
 {
         "pk": "403",
-        "model": "hs_scholar_profile.PhoneType",
+        "model": "hs_party.PhoneType",
         "fields": {
             "code":"main",
             "name": "main",
@@ -219,7 +299,7 @@
         }
     } ,   {
         "pk": "404",
-        "model": "hs_scholar_profile.PhoneType",
+        "model": "hs_party.PhoneType",
         "fields": {
             "code":"home",
             "name": "home",
@@ -228,7 +308,7 @@
         }
     } ,   {
         "pk": "405",
-        "model": "hs_scholar_profile.PhoneType",
+        "model": "hs_party.PhoneType",
         "fields": {
             "code":"main",
             "name": "main company phone",
@@ -238,7 +318,7 @@
     }
 ,   {
         "pk": "406",
-        "model": "hs_scholar_profile.PhoneType",
+        "model": "hs_party.PhoneType",
         "fields": {
             "code":"fax",
             "name": "fax",
@@ -249,7 +329,7 @@
     ,
       {
         "pk": "500",
-        "model": "hs_scholar_profile.EmailType",
+        "model": "hs_party.EmailType",
         "fields": {
             "code":"other",
             "name": "other",
@@ -259,7 +339,7 @@
     },
       {
         "pk": "501",
-        "model": "hs_scholar_profile.EmailType",
+        "model": "hs_party.EmailType",
         "fields": {
             "code":"personal",
             "name": "personal",
@@ -270,7 +350,7 @@
 ,
       {
         "pk": "502",
-        "model": "hs_scholar_profile.EmailType",
+        "model": "hs_party.EmailType",
         "fields": {
             "code":"wprk",
             "name": "work",
@@ -280,7 +360,7 @@
     },
       {
         "pk": "502",
-        "model": "hs_scholar_profile.EmailType",
+        "model": "hs_party.EmailType",
         "fields": {
             "code":"support",
             "name": "support",
@@ -291,7 +371,7 @@
 ,
       {
         "pk": "600",
-        "model": "hs_scholar_profile.ExternalIdentifierType",
+        "model": "hs_party.ExternalIdentifierType",
         "fields": {
             "code":"other",
             "name": "other",
@@ -301,7 +381,7 @@
     },
       {
         "pk": "601",
-        "model": "hs_scholar_profile.ExternalIdentifierType",
+        "model": "hs_party.ExternalIdentifierType",
         "fields": {
             "code":"orcid",
             "name": "ORCID user idntifier",
@@ -312,7 +392,7 @@
     },
       {
         "pk": "602",
-        "model": "hs_scholar_profile.ExternalIdentifierType",
+        "model": "hs_party.ExternalIdentifierType",
         "fields": {
             "code":"twitter",
             "name": "other",
@@ -322,7 +402,7 @@
     },
       {
         "pk": "603",
-        "model": "hs_scholar_profile.ExternalIdentifierType",
+        "model": "hs_party.ExternalIdentifierType",
         "fields": {
             "code":"facebook",
             "name": "facebook",
@@ -332,7 +412,7 @@
     },
       {
         "pk": "604",
-        "model": "hs_scholar_profile.ExternalIdentifierType",
+        "model": "hs_party.ExternalIdentifierType",
         "fields": {
             "code":"google",
             "name": "google",
@@ -342,14 +422,84 @@
     },
       {
         "pk": "605",
-        "model": "hs_scholar_profile.ExternalIdentifierType",
+        "model": "hs_party.ExternalIdentifierType",
         "fields": {
             "code":"other",
             "name": "other",
             "order": "1"
 
         }
-    }
+    },
+      {"pk": 1,
+          "model": "hs_party.organization",
+          "fields": {"parentOrganization": null,
+              "short_url": null,
+              "site": 1,
+              "keywords_string": "",
+              "in_sitemap": true,
+              "organizationType": "other",
+              "title": "",
+              "uniqueCode": "05ea3530-83cd-4db2-a2e6-83531de61e72",
+              "status": 2, "lastUpdate": "2014-07-22",
+              "updated": "2014-07-22T19:35:49.143Z",
+              "description": "Default Organization",
+              "expiry_date": null,
+              "createdDate": "2014-07-22",
+              "slug": "", "gen_description": true,
+              "name": "Default Organization",
+              "created": "2014-07-22T19:35:49.143Z",
+              "url": "",
+              "notes": "",
+              "_meta_title": null,
+              "publish_date": "2014-07-22T19:35:49.131Z",
+              "logoUrl": ""}
+      }
+
+    ,
+    {
+        "pk": 1,
+        "model": "hs_party.person",
+        "fields": {
+            "short_url": null,
+            "site": 1,
+            "keywords_string": "",
+            "in_sitemap": true,
+            "title": "",
+            "primaryOrganizationName": "",
+            "uniqueCode": "a9f6edf9-d52c-4e5d-880e-b53cc0990690",
+            "status": 2,
+            "lastUpdate": "2014-07-22",
+            "updated": "2014-07-22T19:37:19.090Z",
+            "description": "John Doe",
+            "jobTitle": "",
+            "familyName": "Doe",
+            "primaryTelephone": "",
+            "expiry_date": null,
+            "createdDate": "2014-07-22",
+            "slug": "",
+            "gen_description": true,
+            "name": "John Doe",
+            "created": "2014-07-22T19:37:19.090Z",
+            "url": "",
+            "notes": "",
+            "primaryAddress": "",
+            "_meta_title": null,
+            "publish_date": "2014-07-22T19:37:19.081Z",
+            "givenName": "John"
+        }
+    },
+    {"pk": 1,
+    "model": "hs_party.organizationassociation",
+    "fields": {"endDate": null,
+        "jobTitle": "",
+        "beginDate": "2014-07-23",
+        "presentOrganization": true,
+    "person": 1,
+    "createdDate": "2014-07-23",
+    "uniqueCode": "f517e82d-77d7-41d8-b7dc-088e75ef05ba",
+    "organization": 1
+    }}
+
 ]
 
 

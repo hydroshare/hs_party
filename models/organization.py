@@ -1,1 +1,144 @@
+from django.contrib.contenttypes import generic
+from django.contrib.auth.models import User, Group
+from django.db import models
+from mezzanine.pages.models import Page, RichText,Displayable
+from mezzanine.core.fields import FileField, RichTextField
+from mezzanine.core.models import Ownable
+from mezzanine.generic.models import  Orderable
+from mezzanine.generic.fields import KeywordsField
+from hs_core.models import AbstractResource
+from django.db.models.signals import  post_save
+from datetime import date
+from uuid import uuid4
+from django.db.models.signals import post_save,pre_save,post_init
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist,ValidationError
+from django.core.urlresolvers import reverse
+
+from party import PartyModel
+from party_types import PartyEmailModel,PartyGeolocation,PartyPhoneModel,PartyLocationModel,ExternalIdentifierType
+from person import Person
+
+
 __author__ = 'valentin'
+
+#=======================================================================================
+# ORGANIZATION
+# ======================================================================================
+# make consistent with CUAHSI
+
+class OrganizationType(models.Model):
+    # these are classes, so changing the model means you change this
+    code = models.CharField(primary_key=True,verbose_name="Acronym for Organization Type", max_length=24, blank=False)
+    name = models.CharField(verbose_name="Brief Name or Organization Type",max_length=255, blank=False)
+    order = models.IntegerField(verbose_name="Optional Order", blank=True)
+    url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        app_label = 'hs_party'
+    pass
+
+
+class Organization(Displayable,PartyModel):
+    ORG_TYPES_CHOICES = (
+    ("commercial", "Commercial/Professional")
+    , ("university","University")
+    , ("college", "College")
+    , ("gov", "Government Organization")
+    , ("nonprofit", "Non-profit Organization")
+    , ("k12", "School  Kindergarten to 12th Grade")
+    , ("cc", "Community College ")
+    , ("other", "Other")
+    , ("Unspecified", "Unspecified")
+    )
+    logoUrl = models.ImageField(blank=True, upload_to='orgLogos')
+    #smallLogoUrl = models.ImageField()
+    parentOrganization = models.ForeignKey('self', null=True,blank=True)
+    organizationType = models.ForeignKey(OrganizationType,)
+    # externalIdentifiers from ExternalOrgIdentifiers
+    specialities = KeywordsField()
+    persons = models.ManyToManyField(Person, verbose_name="Organizations",
+                                           through="OrganizationAssociation", blank=True, null=True,
+                                           related_name="organizations",symmetrical=False
+    ,)
+
+
+    businessAddress = models.CharField(max_length='100', blank=True, verbose_name="business Address", help_text="business Mailing or Street, if known")
+    businessTelephone = models.CharField(max_length='30', blank=True, verbose_name="business Telephone",help_text="business Telephone, if known")
+
+    def get_absolute_url(self):
+        return reverse('organization_detail', kwargs={'pk': self.pk})
+
+    def __init__(self, *args, **kwargs):
+        super(Organization, self).__init__(*args, **kwargs)
+        nameField = self._meta.get_field('name')
+        nameField.verbose_name="Organization Name"
+        nameField.help_text="Organization Name"
+        notesField = self._meta.get_field('notes')
+        notesField.verbose_name="Description"
+        notesField.help_text="Brief Description of organizaiton"
+        urlField = self._meta.get_field('url')
+        urlField.verbose_name="Web Page for Organization"
+        urlField.help_text="Organizaiton web page"
+
+    def __unicode__(self):
+        return unicode(self.name)
+
+    class Meta:
+        app_label = 'hs_party'
+    pass
+
+
+
+class OrganizationEmail(PartyEmailModel):
+    organization = models.ForeignKey(to=Organization, related_name="email_addresses", blank=True,null=True)
+
+    class Meta:
+        app_label = 'hs_party'
+    pass
+
+class OrganizationLocation(PartyLocationModel):
+    organization = models.ForeignKey(to=Organization, related_name="mail_addresses", blank=True,null=True)
+
+    class Meta:
+        app_label = 'hs_party'
+    pass
+
+class OrganizationPhone(PartyPhoneModel):
+    organization = models.ForeignKey(to=Organization, related_name="phone_numbers", blank=True,null=True)
+
+    class Meta:
+        app_label = 'hs_party'
+    pass
+
+class OrganizationNames(PartyPhoneModel):
+    organization = models.ForeignKey(to=Organization, related_name="alternate_names", blank=True,null=True)
+
+    class Meta:
+        app_label = 'hs_party'
+    pass
+
+
+class ExternalOrgIdentifiers(models.Model):
+    organization = models.ForeignKey(to=Organization, related_name='externalIdentifiers')
+    IDENTIFIER_CHOICE = (
+                         ("LOC", "Library of Congress")
+                         , ("NSF", "National Science Foundation")
+                         , ("linked","linked Data URL")
+                         , ("twitter", "twitterHandle")
+                         , ("ProjectPage", "page for project")
+                         , ("other", "other")
+    )
+    identifierName = models.ForeignKey(ExternalIdentifierType, verbose_name="User Identities",
+                                      help_text="User identities from external sites",max_length='10')
+    otherName = models.CharField(verbose_name="If other is selected, type of identifier", blank=True,max_length='255')
+    identifierCode = models.CharField(verbose_name="Username or Identifier for site",max_length='255')
+    createdDate = models.DateField(auto_now_add=True)
+    # validation needed. if identifierName =='other' then otherName must be populated.
+
+    class Meta:
+        app_label = 'hs_party'

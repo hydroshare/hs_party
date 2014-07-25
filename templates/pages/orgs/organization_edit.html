@@ -3,30 +3,14 @@
 
 {% block main %}
 
+<h2>Edit {{ organization.name }}</h2>
+   <div class='row'>
+   <form enctype="multipart/form-data" method="post" action="">
+   <fieldset class="model">
 
-    <div>
-        <p style="text-align:justify;">
-         <span>Name:</span>  {% editable  organization.name  %}
-            {{ organization.name|truncatewords_html:50 }}
-        {% endeditable %}
-
-        </p>
-         <p>   <span>Type:</span> {% editable  organization.organizationType  %}
-            {{ organization.organizationType }}
-             </p>
-        {% endeditable %}
-        <p>
-             <span>Url:</span>  {% editable  organization.url  %}
-            {{ organization.url }}
-        {% endeditable %}
-    </p>
-    <p>
-         <span>Description:</span>      {% editable  organization.notes  %}
-            {{ organization.notes }}
-        {% endeditable %}
-    </p>
-    </div>
-
-
+{%  fields_for form %}
+       <input class="btn btn-warning btn-lg" type="submit" value="Save Edits" action=""/>
+</fieldset>
+</form>
     {% editable_loader %}
 {% endblock %}

@@ -14,20 +14,12 @@ from django.utils.translation import ugettext_lazy as _
 
 
 # intial form
-class OrganizationEditorForm(ModelForm):
+class OrganizationAssociationEditorForm(ModelForm):
 
     class Meta:
-        model = Organization
-        fields = ["name","organizationType","specialities","logoUrl",
-              "businessAddress","businessTelephone","logoUrl","notes","parentOrganization"]
-        widgets = {
-            'notes': Textarea(attrs={'cols': 80, 'rows': 6}),
-        }
-        labels = {
-            'notes': _('Short Organization Description'),
-        }
-        help_texts = {
-            'notes': _('Short Organization Description.'),
-        }
+        model = OrganizationAssociation
+        fields = ["person","organization","jobTitle","beginDate",
+              "endDate","presentOrganization"]
+
 
     pass

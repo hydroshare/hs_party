@@ -2,8 +2,8 @@
 {% load  pages_tags mezzanine_tags keyword_tags  %}
 
 {% block content %}
-
-<h2>Edit Association for {{ object.organization.name }} of {{ object.person.name }}</h2>
+{{  object.pk }}
+<h2>Edit Association for {{ organizationassociation.organization.name }} of {{ organizationassociation.person.name }}</h2>
    <div class='row'>
    <form enctype="multipart/form-data" method="post" action="">
    <fieldset class="model">

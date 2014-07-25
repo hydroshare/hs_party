@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 #from django_webtest import WebTest
-from ..models import Organization, Person, OtherNames,UserType
+from ..models.organization import Organization
+from ..models.person import Person, OtherNames,UserType
+from django.core.exceptions import ObjectDoesNotExist,ValidationError
 
 
 
@@ -9,7 +11,7 @@ __author__ = 'valentin'
 
 
 class PersonTest(TestCase):
-    fixtures =['userdemographics.json']
+    fixtures =['initial_data.json']
 
     def setUp(self):
         otherChoice = UserType.objects.get(code='other')
@@ -40,6 +42,15 @@ class PersonTest(TestCase):
     def test_name(self):
         person1 = Person.objects.get(familyName='2')
         self.assertEqual(person1.name, '1 2')
+
+    def test_dupecheck(self):
+        person1 = Person(familyName='2', givenName='1')
+        person2 = Person(familyName='2', givenName='1', name='dummy name')
+        person2.save() # no error
+        with self.assertRaises(ValidationError):
+           #person1.validate_unique()
+           person1.save() # should be an error
+
 
 
 

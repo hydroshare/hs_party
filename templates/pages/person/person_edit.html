@@ -5,12 +5,14 @@
 <h1>PERSON</h1>
 
    <div class='row'>
-{% editable person %}
+   <form enctype="multipart/form-data" method="post" action="">
+   <fieldset class="model">
 
-       {{ person.name }}
-       {{ person.familyName }}
-       {{ person.givenName }}
-   {% endeditable %}
+{%  fields_for form %}
+       <input class="btn btn-warning btn-lg" type="submit" value="Save Edits" action=""/>
+</fieldset>
+       </form>
+
 
    </div>
 

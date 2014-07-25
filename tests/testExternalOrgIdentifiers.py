@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from ..models import ExternalOrgIdentifiers, OtherNames,ExternalIdentifierType, Organization,OrganizationType
+from ..models.organization import ExternalOrgIdentifiers
+from ..models.party_types import ExternalIdentifierType
+from ..models.organization import Organization,OrganizationType
 
 __author__ = 'valentin'
 

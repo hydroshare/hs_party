@@ -2,13 +2,92 @@
 {% load  pages_tags mezzanine_tags %}
 
 {% block main %}
-<h1>PERSON</h1>
 
-   <div class='row'>
+<h1>{{ person.name }}</h1>
+    {% if request.user.is_authenticated %}
+ <a href="{%   url 'person_edit' person.pk %}">
+                      Edit {{ person.name }} </a>
+    {%  endif %}
+
+ <table class="table">
+ <tr>
+     <td>Family Name</td>
+     <td>{{ person.familyName }}</td>
+ </tr>
+  <tr>
+     <td>First or Given Name</td>
+     <td>{{ person.givenName }}</td>
+ </tr>
+  <tr>
+     <td>Primary Organization</td>
+     <td> {%  if person.primaryOrganizationRecord %}
+         <a href="{%   url 'organization_detail' person.primaryOrganizationRecord.pk %} ">
+                           {{ person.primaryOrganizationRecord.name }}
+         {% endif %}
+         </a>
+     </td>
+ </tr>
+  <tr>
+     <td>Job Title</td>
+     <td>{{ person.jobTitle }}</td>
+ </tr>
+   <tr>
+     <td>Primary Address</td>
+     <td>{{ person.primaryAddress }}</td>
+ </tr>
+    <tr>
+     <td>Primary Telephon</td>
+     <td>{{ person.primaryTelephone }}</td>
+ </tr>
+  <tr>
+     <td>Biography or Short Note</td>
+     <td>{{ person.notes }}</td>
+ </tr>
+
+ <tr>
+     <td>Personal or Project Web Page</td>
+     <td>{{ person.url }}</td>
+ </tr>
+  <tr>
+     <td>Added</td>
+     <td>{{ person.createdDate }}</td>
+ </tr>
+   <tr>
+     <td>Last Updated</td>
+     <td>{{ person.lastUpdate }}</td>
+ </tr>
+ </table>
 
 
-       {{ object.name }}
 
-   </div>
 
+
+{%  if person.organizationassociation_set.count > 0 %}
+    <h2>Organization Assocations</h2>
+    <table class="table">
+    <tr>
+
+        <th>Organization</th>
+        <th>Job Title</th>
+        <th>From</th>
+        <th>To</th>
+    </tr>
+
+    {% for org in person.organizationassociation_set.all %}
+        <tr>
+        <td> <a href="{%   url 'organization_detail' org.pk %}">{{ org.organization.name }}</a> {%  if org.presentOrganization %}
+            (Presently With)
+        {%  endif %}</td>
+        <td>{{ org.jobTitle }}</td>
+        <td>{{ org.beginDate }}</td>
+        <td>{{ org.endDate }}</td>
+        </tr>
+
+    {% endfor %}
+    </table>
+
+
+
+{%  endif %}
+</ul>
 {% endblock %}
