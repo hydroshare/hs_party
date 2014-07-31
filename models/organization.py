@@ -16,8 +16,11 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from django.core.urlresolvers import reverse
 
-from party import PartyModel
-from party_types import PartyEmailModel,PartyGeolocation,PartyPhoneModel,PartyLocationModel,ExternalIdentifierType
+from party import Party
+from party_types import PartyEmailModel,\
+    PartyGeolocation,PartyPhoneModel,\
+    PartyLocationModel,ExternalIdentifierCodeList,\
+    NameAliasType
 from person import Person
 
 
@@ -28,7 +31,7 @@ __author__ = 'valentin'
 # ======================================================================================
 # make consistent with CUAHSI
 
-class OrganizationType(models.Model):
+class OrganizationCodeList(models.Model):
     # these are classes, so changing the model means you change this
     code = models.CharField(primary_key=True,verbose_name="Acronym for Organization Type", max_length=24, blank=False)
     name = models.CharField(verbose_name="Brief Name or Organization Type",max_length=255, blank=False)
@@ -43,7 +46,7 @@ class OrganizationType(models.Model):
     pass
 
 
-class Organization(Displayable,PartyModel):
+class Organization(Displayable,Party):
     ORG_TYPES_CHOICES = (
     ("commercial", "Commercial/Professional")
     , ("university","University")
@@ -58,7 +61,7 @@ class Organization(Displayable,PartyModel):
     logoUrl = models.ImageField(blank=True, upload_to='orgLogos')
     #smallLogoUrl = models.ImageField()
     parentOrganization = models.ForeignKey('self', null=True,blank=True)
-    organizationType = models.ForeignKey(OrganizationType,)
+    organizationType = models.ForeignKey(OrganizationCodeList,)
     # externalIdentifiers from ExternalOrgIdentifiers
     specialities = KeywordsField()
     persons = models.ManyToManyField(Person, verbose_name="Organizations",
@@ -115,7 +118,7 @@ class OrganizationPhone(PartyPhoneModel):
         app_label = 'hs_party'
     pass
 
-class OrganizationNames(PartyPhoneModel):
+class OrganizationName(NameAliasType):
     organization = models.ForeignKey(to=Organization, related_name="alternate_names", blank=True,null=True)
 
     class Meta:
@@ -123,7 +126,7 @@ class OrganizationNames(PartyPhoneModel):
     pass
 
 
-class ExternalOrgIdentifiers(models.Model):
+class ExternalOrgIdentifier(models.Model):
     organization = models.ForeignKey(to=Organization, related_name='externalIdentifiers')
     IDENTIFIER_CHOICE = (
                          ("LOC", "Library of Congress")
@@ -133,7 +136,7 @@ class ExternalOrgIdentifiers(models.Model):
                          , ("ProjectPage", "page for project")
                          , ("other", "other")
     )
-    identifierName = models.ForeignKey(ExternalIdentifierType, verbose_name="User Identities",
+    identifierName = models.ForeignKey(ExternalIdentifierCodeList, verbose_name="User Identities",
                                       help_text="User identities from external sites",max_length='10')
     otherName = models.CharField(verbose_name="If other is selected, type of identifier", blank=True,max_length='255')
     identifierCode = models.CharField(verbose_name="Username or Identifier for site",max_length='255')

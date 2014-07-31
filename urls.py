@@ -6,7 +6,7 @@ from django.views.generic import ListView, UpdateView
 from . import  views, models
 from .views.organization import OrganizationDetail,OrganizationList,OrganizationEdit,OrganizationCreate
 from .views.person import PersonEdit,PersonDetail, PersonList,PersonCreate
-from .views.organizationassociation import OrganizationAssociationCreate,OrganizationAssociationEdit
+from .views.organizationassociation import OrganizationAssociationCreate,OrganizationAssociationEdit,OrganizationAssociationDetail
 
 __author__ = 'valentin'
 
@@ -30,5 +30,6 @@ urlpatterns += patterns('hs_party.views.person',
 urlpatterns += patterns('hs_party.views.organizationassociation',
 
         url(r'^association/add/$', OrganizationAssociationCreate.as_view(), name="association_add"),
+         url(r'^association/(?P<pk>\d+)/$', OrganizationAssociationDetail.as_view( template_name = "pages/associations/organization_association.html"), name="association_detail"),
         url(r'^association/(?P<pk>\d+)/edit/$', OrganizationAssociationEdit.as_view(template_name = "pages/associations/organization_association_edit.html"), name="association_edit"),
-   )
+ )

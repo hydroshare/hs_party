@@ -15,7 +15,7 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from django.core.urlresolvers import reverse
 
-from .party import PartyModel
+from .party import Party
 from .party_types import PartyEmailModel,PartyGeolocation,PartyPhoneModel,PartyLocationModel
 
 from .activities import ActivitiesModel

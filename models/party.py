@@ -16,7 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist,ValidationError
 
 __author__ = 'valentin'
 
-class PartyModel(models.Model):
+class Party(models.Model):
     #ID = models.AutoField(primary_key=True )
     # not fully sure how to use name. USGS uses distinct LDAP Id's here.
     # change to uniqueID
@@ -34,7 +34,7 @@ class PartyModel(models.Model):
 
 
     def __init__(self, *args, **kwargs):
-        super(PartyModel, self).__init__(*args, **kwargs)
+        super(Party, self).__init__(*args, **kwargs)
         if self.uniqueCode is  None:
             self.uniqueCode = str(uuid4())
         if not self.id:
@@ -42,5 +42,5 @@ class PartyModel(models.Model):
         self.lastUpdate = date.today()
 
     class Meta:
-        abstract = True
+        #abstract = True # if abstract, then we cannot retrieve all party's from database
         app_label = 'hs_party'

@@ -14,17 +14,17 @@ from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 
-from party import PartyModel
-from party_types import PartyEmailModel,PartyGeolocation,PartyPhoneModel,PartyLocationModel
+from party import Party
+
 
 __author__ = 'valentin'
 
-class GroupModel(PartyModel):
+class Group(Displayable,Party):
     # externalIdentifiers from ExternalOrgIdentifiers
     specialities = Keyword()
 
     def __init__(self, *args, **kwargs):
-        super(GroupModel, self).__init__(*args, **kwargs)
+        super(Group, self).__init__(*args, **kwargs)
         nameField = self._meta.get_field('name')
         nameField.verbose_name="Group Name"
         nameField.help_text="Group Name"

@@ -16,18 +16,25 @@ from django.core.exceptions import ObjectDoesNotExist,ValidationError
 
 __author__ = 'valentin'
 
-
-
-######
-# address
-#########
-
-class AddressType(models.Model):
+class CodeListType(models.Model):
     # these are classes, so changing the model means you change this
     code = models.CharField(primary_key=True,verbose_name="Code Choice Item", max_length=24, blank=False)
     name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
     order = models.IntegerField(verbose_name="Optional Order", blank=True)
     url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        abstract = True
+        app_label = 'hs_party'
+
+######
+# address
+#########
+
+class AddressCodeList(CodeListType):
 
     def __unicode__(self):
         return self.name
@@ -44,8 +51,8 @@ class PartyLocationModel(models.Model):
     ("office","Office Address. For a person, includes details of the office number")
     )
     address = models.TextField(verbose_name="Multi-line Address",)
-    address_type = models.ForeignKey(AddressType,
-                                     verbose_name="Type of Address")
+    address_type = models.ForeignKey(AddressCodeList,
+                                     verbose_name="Type of Address",default='mailing')
 
     class Meta:
         abstract = True
@@ -54,12 +61,12 @@ class PartyLocationModel(models.Model):
 ####
 # addres/contact
 ###
-class PhoneType(models.Model):
+class PhoneCodeList(CodeListType):
     # these are classes, so changing the model means you change this
-    code = models.CharField(primary_key=True,verbose_name="Code Choice Item", max_length=24, blank=False)
-    name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
-    order = models.IntegerField(verbose_name="Optional Order", blank=True)
-    url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
+    # code = models.CharField(primary_key=True,verbose_name="Code Choice Item", max_length=24, blank=False)
+    # name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
+    # order = models.IntegerField(verbose_name="Optional Order", blank=True)
+    # url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -75,19 +82,19 @@ class PartyPhoneModel(models.Model):
                             ("other", "Other Phone Numbe"),
     )
     phone_number = models.CharField(verbose_name="Office or main phone number", blank=False,max_length='30')
-    phone_type = models.ForeignKey(PhoneType, blank=True)
+    phone_type = models.ForeignKey(PhoneCodeList, blank=True,default='other')
 
     class Meta:
         abstract = True
         app_label = 'hs_party'
 
 
-class EmailType(models.Model):
+class EmailCodeList(CodeListType):
     # these are classes, so changing the model means you change this
-    code = models.CharField(primary_key=True,verbose_name="Code Choice Item", max_length=24, blank=False)
-    name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
-    order = models.IntegerField(verbose_name="Optional Order", blank=True)
-    url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
+    # code = models.CharField(primary_key=True,verbose_name="Code Choice Item", max_length=24, blank=False)
+    # name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
+    # order = models.IntegerField(verbose_name="Optional Order", blank=True)
+    # url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -104,7 +111,7 @@ class PartyEmailModel(models.Model):
                             ("other", "Other email"),
     )
     email = models.CharField(verbose_name="Email", blank=True,max_length='30')
-    phone_type = models.ForeignKey(EmailType,verbose_name="Email type", blank=True, default='other')
+    email_type = models.ForeignKey(EmailCodeList,verbose_name="Email type", blank=True, default='other')
 
     class Meta:
         abstract = True
@@ -149,13 +156,46 @@ class Country(PartyGeolocation):
 ##########
 # IDENTIFIER SUPPORT
 ##########
-class ExternalIdentifierType(models.Model):
+class ExternalIdentifierCodeList(CodeListType):
     # these are classes, so changing the model means you change this
-    code = models.CharField(primary_key=True, verbose_name="Code Choice Item", max_length=24, blank=False)
-    name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
-    order = models.IntegerField(verbose_name="Optional Order", blank=True)
-    url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
+    # code = models.CharField(primary_key=True, verbose_name="Code Choice Item", max_length=24, blank=False)
+    # name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
+    # order = models.IntegerField(verbose_name="Optional Order", blank=True)
+    # url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
     def __unicode__(self):
         return self.name
     class Meta:
+        app_label = 'hs_party'
+
+
+class NameAliasCodeList(CodeListType):
+    # these are classes, so changing the model means you change this
+    # code = models.CharField(primary_key=True,verbose_name="Code Choice Item", max_length=24, blank=False)
+    # name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
+    # order = models.IntegerField(verbose_name="Optional Order", blank=True)
+    # url = models.CharField(verbose_name="Optional Url pointing to provider",max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        app_label = 'hs_party'
+
+class NameAliasType(models.Model):
+    #ID = models.AutoField(primary_key=True)
+    # relation will show in Party as otherNames
+    otherName = models.CharField(verbose_name="Other Name or alias",max_length='255')
+    ANNOTATION_TYPE_CHOICE = (
+        ("change", "Name Change"),
+        ("citation", "Publishing Alias"),
+        ("fullname", "Full Name variation"),
+        ("other", "other type of alias")
+    )
+    annotation = models.ForeignKey(NameAliasCodeList,verbose_name="type of alias", default=700,max_length='10')
+
+
+
+    class Meta:
+        """Meta Class for your model."""
+        abstract = True
         app_label = 'hs_party'

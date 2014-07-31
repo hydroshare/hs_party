@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse,resolve,reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User,Group
 #from django_webtest import WebTest
-from ..models.organization import Organization,OrganizationType
+from ..models.organization import Organization,OrganizationCodeList
 from ..models.person import Person
 from ..models.organization_association import  OrganizationAssociation
 
@@ -30,11 +30,12 @@ class UserOrgViewTests(TestCase):
     #urls = 'hs_scholar_profile.urls'
 
     def setUp(self):
-        otherChoice = OrganizationType.objects.get(code='other')
+        otherChoice = OrganizationCodeList.objects.get(code='other')
         self.aPerson = Person.objects.create(givenName="last", familyName="first", name="last first")
         self.org2 = Organization.objects.create(name="org2",organizationType=otherChoice)
+        self.oa1 = OrganizationAssociation.objects.create(person=self.aPerson,organization=self.org2)
 
-        agroup = Group.objects.create(name="ResearchGroup")
+
 
     @override_settings(TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner')
     def test_person_list_view(self):
@@ -45,15 +46,13 @@ class UserOrgViewTests(TestCase):
     def test_person_create(self):
         response = self.client.get(reverse("person_add" ) )
         self.assertEqual(response.status_code, 200)
-        #response = self.client.get(reverse("ScholarGroupDetail", args=[  self.rGroup.id] ) )
-        #self.assertEqual(response.status_code, 200)
+
 
 
     def test_organization_list_view(self):
         response = self.client.get(reverse("organization_list"))
         self.assertEqual(response.status_code, 200)
-        #response = self.client.get(reverse("ScholarGroupList"))
-        #self.assertEqual(response.status_code, 200)
+
 
     def test_person_detail_view(self):
         response = self.client.get(reverse("person_detail", args=[ self.aPerson.id] ) )
@@ -62,14 +61,22 @@ class UserOrgViewTests(TestCase):
     def test_organization_detail_view(self):
         response = self.client.get(reverse("organization_detail", args=[  self.org2.id] ) )
         self.assertEqual(response.status_code, 200)
-        #response = self.client.get(reverse("ScholarGroupDetail", args=[  self.rGroup.id] ) )
-        #self.assertEqual(response.status_code, 200)
+
 
     def test_organization_create(self):
         response = self.client.get(reverse("organization_add" ) )
         self.assertEqual(response.status_code, 200)
-        #response = self.client.get(reverse("ScholarGroupDetail", args=[  self.rGroup.id] ) )
-        #self.assertEqual(response.status_code, 200)
+
+
+    def test_association_create(self):
+        response = self.client.get(reverse("association_add" ) )
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_association_edit(self):
+        response = self.client.get(reverse("association_edit" , args=['1']) )
+        self.assertEqual(response.status_code, 200)
+
 
 
 # tried:  resolve....)

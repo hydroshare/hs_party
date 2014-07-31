@@ -11,6 +11,25 @@ from .models import *
 class PersonInline(admin.TabularInline):
     model = Person
 
+class PersonAddressInline(admin.TabularInline):
+    model = PersonLocation
+    extra = 1
+
+class PersonEmailInline(admin.TabularInline):
+    model = PersonEmail
+    extra = 1
+
+class PersonIdentifiersInline(admin.StackedInline):
+    model = PersonExternalIdentifier
+    extra = 1
+
+class PersonOtherNamesInline(admin.TabularInline):
+    model = OtherName
+    extra = 1
+
+class PersonPhoneInline(admin.TabularInline):
+    model = PersonPhone
+    extra = 1
 
 #####
 # Org
@@ -21,6 +40,25 @@ class OrgInline (admin.StackedInline):
     model = Organization
     list_display = ('name',"organizationType")
 
+class OrgAddressInline(admin.TabularInline):
+    model = OrganizationLocation
+    extra = 1
+
+class OrgEmailInline(admin.TabularInline):
+    model = OrganizationEmail
+    extra = 1
+
+class OrgIdentifiersInline(admin.StackedInline):
+    model = ExternalOrgIdentifier
+    extra = 1
+
+class OrgOtherNamesInline(admin.TabularInline):
+    model = OrganizationName
+    extra = 1
+
+class OrgPhoneInline(admin.TabularInline):
+    model = OrganizationPhone
+    extra = 1
 
 class PersonAssociationInline(StackedDynamicInlineAdmin):
     model = Organization.persons.through
@@ -28,7 +66,7 @@ class PersonAssociationInline(StackedDynamicInlineAdmin):
 #    inlines = (OrgInline)
 
 class OrganizationTypeInline(admin.TabularInline):
-    model = OrganizationType
+    model = OrganizationCodeList
     list_display = ('code',"name")
 
 #class OrganizationAdmin( ModelAdmin):
@@ -36,7 +74,11 @@ class OrganizationAdmin(DisplayableAdmin):
     model = Organization
     search_fields = ['name',]
     readonly_fields = ["uniqueCode",]
-    #inlines = (OrganizationTypeInline,PersonAssociationInline)
+    inlines = (OrgOtherNamesInline,
+               OrgEmailInline,
+               OrgIdentifiersInline,
+               OrgAddressInline,
+               OrgPhoneInline,)
     #inlines = (PersonAssociationInline,)
     list_display = ("id","name","organizationType")
     list_display_links = ("id",)
@@ -57,13 +99,17 @@ class OrganizationAdmin(DisplayableAdmin):
 
 
 class UserTypeInline(admin.TabularInline):
-    model = UserType
+    model = UserCodeList
     list_display = ('code',"name")
 
 class PersonAdmin(DisplayableAdmin):
     model = Person
     search_fields = [ "name" , ]
-    inlines = (PersonAssociationInline,)# OrgInline)
+    inlines = (PersonOtherNamesInline,
+               PersonIdentifiersInline,
+               PersonEmailInline,
+               PersonAddressInline,
+               PersonPhoneInline, )# OrgInline)
     list_display = ("id","name","primaryOrganizationRecord",)
     list_display_links = ("id",)
     list_editable = ()
@@ -90,13 +136,13 @@ admin.site.register(Person, PersonAdmin)
 
 admin.site.register(OrganizationAssociation)
 
-admin.site.register(UserType)
-admin.site.register(OrganizationType)
-admin.site.register(PhoneType)
-admin.site.register(AddressType)
-admin.site.register(EmailType)
-admin.site.register(ExternalIdentifierType)
-
+admin.site.register(UserCodeList)
+admin.site.register(OrganizationCodeList)
+admin.site.register(PhoneCodeList)
+admin.site.register(AddressCodeList)
+admin.site.register(EmailCodeList)
+admin.site.register(ExternalIdentifierCodeList)
+admin.site.register(NameAliasCodeList)
 
 
 class GroupInlineAdmin(admin.TabularInline):

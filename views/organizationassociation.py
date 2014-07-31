@@ -20,7 +20,7 @@ from django.core.exceptions import ObjectDoesNotExist
 #@login_required
 class OrganizationAssociationEdit(UpdateView):
     model = OrganizationAssociation
-    template_name = "pages/associations/organization_association_edit.html"
+    #template_name = "pages/associations/organization_association_edit.html"
     form_class = OrganizationAssociationEditorForm
 
 #@login_required
@@ -30,21 +30,21 @@ class OrganizationAssociationCreate(CreateView):
     fields = ["person","organization","jobTitle","beginDate",
               "endDate","presentOrganization"]
 
-# class OrganizationAssociationDetail(DetailView):
-#     model = OrganizationAssociation
-#     queryset = OrganizationAssociation.objects.all()
-#     template_name = "pages/associations/organization.html"
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(OrganizationAssociationDetail, self).get_context_data(**kwargs)
-#         #context['now'] = timezone.now()
-#         return context
-#
-#     def get_object(self,**kwargs):
-#         # Call the superclass
-#         object = super(OrganizationAssociationDetail, self).get_object(**kwargs)
-#         # Record the last accessed date
-#         #object.last_accessed = timezone.now()
-#         #object.save()
-#         # Return the object
-#         return object
+class OrganizationAssociationDetail(DetailView):
+    model = OrganizationAssociation
+    queryset = OrganizationAssociation.objects.all()
+    template_name = "pages/associations/organization_association.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(OrganizationAssociationDetail, self).get_context_data(**kwargs)
+        #context['now'] = timezone.now()
+        return context
+
+    def get_object(self,**kwargs):
+        # Call the superclass
+        object = super(OrganizationAssociationDetail, self).get_object(**kwargs)
+        # Record the last accessed date
+        #object.last_accessed = timezone.now()
+        #object.save()
+        # Return the object
+        return object

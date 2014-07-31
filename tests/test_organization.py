@@ -2,10 +2,10 @@ from __future__ import absolute_import
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 #from django_webtest import WebTest
-from ..models.organization import Organization,OrganizationType,ExternalOrgIdentifiers
+from ..models.organization import Organization,OrganizationCodeList,ExternalOrgIdentifier
 from ..models.person import    Person
 from ..models.organization_association import OrganizationAssociation
-from ..models.party_types import  ExternalIdentifierType
+from ..models.party_types import  ExternalIdentifierCodeList
 from datetime import date
 
 
@@ -13,12 +13,17 @@ from datetime import date
 __author__ = 'valentin'
 
 
+def createOrgBasic():
+        otherChoice = OrganizationCodeList.objects.get(code='other')
+        anOrg = Organization.objects.create(name="org1",organizationType=otherChoice)
+        return anOrg
+
 class organizationTest(TestCase):
     fixtures =['initial_data.json']
 
     def setUp(self):
-        otherChoice = OrganizationType.objects.get(code='other')
-        idChoice = ExternalIdentifierType.objects.get(code='other')
+        otherChoice = OrganizationCodeList.objects.get(code='other')
+        idChoice = ExternalIdentifierCodeList.objects.get(code='other')
         self.p1 = Person.objects.create(givenName="first", familyName="last", name="First Last")
         self.p2 = Person.objects.create(givenName="last", familyName="first", name="last first")
         Organization.objects.create(name="org1",organizationType=otherChoice)
@@ -28,7 +33,7 @@ class organizationTest(TestCase):
         self.org3 = Organization.objects.create(name="org3",organizationType=otherChoice)
         OrganizationAssociation.objects.create(person=self.p1,organization=self.org3,beginDate=date(2013,01,10), endDate=date(2013,02,01), presentOrganization=False)
         OrganizationAssociation.objects.create(person=self.p2,organization=self.org3,beginDate=date(2014,01,01))
-        ExternalOrgIdentifiers.objects.create(organization=self.org2,identifierName=idChoice,identifierCode="code1")
+        ExternalOrgIdentifier.objects.create(organization=self.org2,identifierName=idChoice,identifierCode="code1")
         self.org3.parentOrganization = self.org2
         self.org3.save()
 

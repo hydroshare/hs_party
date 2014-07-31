@@ -8,32 +8,44 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'AddressType'
-        db.create_table(u'hs_party_addresstype', (
-            ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+        # Adding model 'Party'
+        db.create_table(u'hs_party_party', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='55c20183-c0c7-40ce-8687-74d03a1f5905', max_length=64)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length='255')),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length='255', blank=True)),
+            ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
+            ('lastUpdate', self.gf('django.db.models.fields.DateField')(auto_now=True, blank=True)),
         ))
-        db.send_create_signal('hs_party', ['AddressType'])
+        db.send_create_signal('hs_party', ['Party'])
 
-        # Adding model 'PhoneType'
-        db.create_table(u'hs_party_phonetype', (
+        # Adding model 'AddressCodeList'
+        db.create_table(u'hs_party_addresscodelist', (
             ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
             ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
-        db.send_create_signal('hs_party', ['PhoneType'])
+        db.send_create_signal('hs_party', ['AddressCodeList'])
 
-        # Adding model 'EmailType'
-        db.create_table(u'hs_party_emailtype', (
+        # Adding model 'PhoneCodeList'
+        db.create_table(u'hs_party_phonecodelist', (
             ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
             ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
-        db.send_create_signal('hs_party', ['EmailType'])
+        db.send_create_signal('hs_party', ['PhoneCodeList'])
+
+        # Adding model 'EmailCodeList'
+        db.create_table(u'hs_party_emailcodelist', (
+            ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
+            ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+        ))
+        db.send_create_signal('hs_party', ['EmailCodeList'])
 
         # Adding model 'City'
         db.create_table(u'hs_party_city', (
@@ -59,18 +71,27 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('hs_party', ['Country'])
 
-        # Adding model 'ExternalIdentifierType'
-        db.create_table(u'hs_party_externalidentifiertype', (
+        # Adding model 'ExternalIdentifierCodeList'
+        db.create_table(u'hs_party_externalidentifiercodelist', (
             ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
             ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
-        db.send_create_signal('hs_party', ['ExternalIdentifierType'])
+        db.send_create_signal('hs_party', ['ExternalIdentifierCodeList'])
+
+        # Adding model 'NameAliasCodeList'
+        db.create_table(u'hs_party_namealiascodelist', (
+            ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
+            ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+        ))
+        db.send_create_signal('hs_party', ['NameAliasCodeList'])
 
         # Adding model 'Person'
         db.create_table(u'hs_party_person', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            (u'party_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['hs_party.Party'], unique=True, primary_key=True)),
             (u'keywords_string', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
             ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=500)),
@@ -85,12 +106,6 @@ class Migration(SchemaMigration):
             ('expiry_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('short_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('in_sitemap', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='cd63582c-affd-4394-9bae-3b6eef69ee96', max_length=64)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length='255')),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length='255', blank=True)),
-            ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('lastUpdate', self.gf('django.db.models.fields.DateField')(auto_now=True, blank=True)),
             ('givenName', self.gf('django.db.models.fields.CharField')(max_length='125')),
             ('familyName', self.gf('django.db.models.fields.CharField')(max_length='125')),
             ('jobTitle', self.gf('django.db.models.fields.CharField')(max_length='100', blank=True)),
@@ -105,7 +120,7 @@ class Migration(SchemaMigration):
         db.create_table(u'hs_party_personemail', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('email', self.gf('django.db.models.fields.CharField')(max_length='30', blank=True)),
-            ('phone_type', self.gf('django.db.models.fields.related.ForeignKey')(default='other', to=orm['hs_party.EmailType'], blank=True)),
+            ('email_type', self.gf('django.db.models.fields.related.ForeignKey')(default='other', to=orm['hs_party.EmailCodeList'], blank=True)),
             ('person', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='email_addresses', null=True, to=orm['hs_party.Person'])),
         ))
         db.send_create_signal('hs_party', ['PersonEmail'])
@@ -114,7 +129,7 @@ class Migration(SchemaMigration):
         db.create_table(u'hs_party_personlocation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('address', self.gf('django.db.models.fields.TextField')()),
-            ('address_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.AddressType'])),
+            ('address_type', self.gf('django.db.models.fields.related.ForeignKey')(default='mailing', to=orm['hs_party.AddressCodeList'])),
             ('person', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='mail_addresses', null=True, to=orm['hs_party.Person'])),
         ))
         db.send_create_signal('hs_party', ['PersonLocation'])
@@ -123,41 +138,52 @@ class Migration(SchemaMigration):
         db.create_table(u'hs_party_personphone', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('phone_number', self.gf('django.db.models.fields.CharField')(max_length='30')),
-            ('phone_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.PhoneType'], blank=True)),
+            ('phone_type', self.gf('django.db.models.fields.related.ForeignKey')(default='other', to=orm['hs_party.PhoneCodeList'], blank=True)),
             ('person', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='phone_numbers', null=True, to=orm['hs_party.Person'])),
         ))
         db.send_create_signal('hs_party', ['PersonPhone'])
 
-        # Adding model 'UserType'
-        db.create_table(u'hs_party_usertype', (
-            ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-        ))
-        db.send_create_signal('hs_party', ['UserType'])
-
-        # Adding model 'OtherNames'
-        db.create_table(u'hs_party_othernames', (
+        # Adding model 'PersonExternalIdentifier'
+        db.create_table(u'hs_party_personexternalidentifier', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('persons', self.gf('django.db.models.fields.related.ForeignKey')(related_name='otherNames', to=orm['hs_party.Person'])),
-            ('otherName', self.gf('django.db.models.fields.CharField')(max_length='255')),
-            ('annotation', self.gf('django.db.models.fields.CharField')(default='citation', max_length='10')),
+            ('person', self.gf('django.db.models.fields.related.ForeignKey')(related_name='externalIdentifiers', to=orm['hs_party.Person'])),
+            ('identifierName', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.ExternalIdentifierCodeList'], max_length='10')),
+            ('otherName', self.gf('django.db.models.fields.CharField')(max_length='255', blank=True)),
+            ('identifierCode', self.gf('django.db.models.fields.CharField')(max_length='255')),
+            ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
         ))
-        db.send_create_signal('hs_party', ['OtherNames'])
+        db.send_create_signal('hs_party', ['PersonExternalIdentifier'])
 
-        # Adding model 'OrganizationType'
-        db.create_table(u'hs_party_organizationtype', (
+        # Adding model 'UserCodeList'
+        db.create_table(u'hs_party_usercodelist', (
             ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
             ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
-        db.send_create_signal('hs_party', ['OrganizationType'])
+        db.send_create_signal('hs_party', ['UserCodeList'])
+
+        # Adding model 'OtherName'
+        db.create_table(u'hs_party_othername', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('otherName', self.gf('django.db.models.fields.CharField')(max_length='255')),
+            ('annotation', self.gf('django.db.models.fields.related.ForeignKey')(default=700, to=orm['hs_party.NameAliasCodeList'], max_length='10')),
+            ('persons', self.gf('django.db.models.fields.related.ForeignKey')(related_name='otherNames', to=orm['hs_party.Person'])),
+        ))
+        db.send_create_signal('hs_party', ['OtherName'])
+
+        # Adding model 'OrganizationCodeList'
+        db.create_table(u'hs_party_organizationcodelist', (
+            ('code', self.gf('django.db.models.fields.CharField')(max_length=24, primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('order', self.gf('django.db.models.fields.IntegerField')(blank=True)),
+            ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+        ))
+        db.send_create_signal('hs_party', ['OrganizationCodeList'])
 
         # Adding model 'Organization'
         db.create_table(u'hs_party_organization', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            (u'party_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['hs_party.Party'], unique=True, primary_key=True)),
             (u'specialities_string', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
             (u'keywords_string', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
             ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
@@ -173,15 +199,9 @@ class Migration(SchemaMigration):
             ('expiry_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('short_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('in_sitemap', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='1177a306-511b-407a-b68e-16314272ac69', max_length=64)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length='255')),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length='255', blank=True)),
-            ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('lastUpdate', self.gf('django.db.models.fields.DateField')(auto_now=True, blank=True)),
             ('logoUrl', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
             ('parentOrganization', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.Organization'], null=True, blank=True)),
-            ('organizationType', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.OrganizationType'])),
+            ('organizationType', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.OrganizationCodeList'])),
             ('businessAddress', self.gf('django.db.models.fields.CharField')(max_length='100', blank=True)),
             ('businessTelephone', self.gf('django.db.models.fields.CharField')(max_length='30', blank=True)),
         ))
@@ -191,7 +211,7 @@ class Migration(SchemaMigration):
         db.create_table(u'hs_party_organizationemail', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('email', self.gf('django.db.models.fields.CharField')(max_length='30', blank=True)),
-            ('phone_type', self.gf('django.db.models.fields.related.ForeignKey')(default='other', to=orm['hs_party.EmailType'], blank=True)),
+            ('email_type', self.gf('django.db.models.fields.related.ForeignKey')(default='other', to=orm['hs_party.EmailCodeList'], blank=True)),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='email_addresses', null=True, to=orm['hs_party.Organization'])),
         ))
         db.send_create_signal('hs_party', ['OrganizationEmail'])
@@ -200,7 +220,7 @@ class Migration(SchemaMigration):
         db.create_table(u'hs_party_organizationlocation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('address', self.gf('django.db.models.fields.TextField')()),
-            ('address_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.AddressType'])),
+            ('address_type', self.gf('django.db.models.fields.related.ForeignKey')(default='mailing', to=orm['hs_party.AddressCodeList'])),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='mail_addresses', null=True, to=orm['hs_party.Organization'])),
         ))
         db.send_create_signal('hs_party', ['OrganizationLocation'])
@@ -209,51 +229,59 @@ class Migration(SchemaMigration):
         db.create_table(u'hs_party_organizationphone', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('phone_number', self.gf('django.db.models.fields.CharField')(max_length='30')),
-            ('phone_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.PhoneType'], blank=True)),
+            ('phone_type', self.gf('django.db.models.fields.related.ForeignKey')(default='other', to=orm['hs_party.PhoneCodeList'], blank=True)),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='phone_numbers', null=True, to=orm['hs_party.Organization'])),
         ))
         db.send_create_signal('hs_party', ['OrganizationPhone'])
 
-        # Adding model 'OrganizationNames'
-        db.create_table(u'hs_party_organizationnames', (
+        # Adding model 'OrganizationName'
+        db.create_table(u'hs_party_organizationname', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('phone_number', self.gf('django.db.models.fields.CharField')(max_length='30')),
-            ('phone_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.PhoneType'], blank=True)),
+            ('otherName', self.gf('django.db.models.fields.CharField')(max_length='255')),
+            ('annotation', self.gf('django.db.models.fields.related.ForeignKey')(default=700, to=orm['hs_party.NameAliasCodeList'], max_length='10')),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='alternate_names', null=True, to=orm['hs_party.Organization'])),
         ))
-        db.send_create_signal('hs_party', ['OrganizationNames'])
+        db.send_create_signal('hs_party', ['OrganizationName'])
 
-        # Adding model 'ExternalOrgIdentifiers'
-        db.create_table(u'hs_party_externalorgidentifiers', (
+        # Adding model 'ExternalOrgIdentifier'
+        db.create_table(u'hs_party_externalorgidentifier', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(related_name='externalIdentifiers', to=orm['hs_party.Organization'])),
-            ('identifierName', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.ExternalIdentifierType'], max_length='10')),
+            ('identifierName', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.ExternalIdentifierCodeList'], max_length='10')),
             ('otherName', self.gf('django.db.models.fields.CharField')(max_length='255', blank=True)),
             ('identifierCode', self.gf('django.db.models.fields.CharField')(max_length='255')),
             ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
         ))
-        db.send_create_signal('hs_party', ['ExternalOrgIdentifiers'])
+        db.send_create_signal('hs_party', ['ExternalOrgIdentifier'])
 
-        # Adding model 'GroupModel'
-        db.create_table(u'hs_party_groupmodel', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='04a37fa4-4954-405f-b7b1-bd009fa3e413', max_length=64)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length='255')),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length='255', blank=True)),
-            ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('lastUpdate', self.gf('django.db.models.fields.DateField')(auto_now=True, blank=True)),
+        # Adding model 'Group'
+        db.create_table(u'hs_party_group', (
+            (u'party_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['hs_party.Party'], unique=True, primary_key=True)),
+            (u'keywords_string', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
+            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=500)),
+            ('slug', self.gf('django.db.models.fields.CharField')(max_length=2000, null=True, blank=True)),
+            ('_meta_title', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
+            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('gen_description', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('status', self.gf('django.db.models.fields.IntegerField')(default=2)),
+            ('publish_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('expiry_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('short_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+            ('in_sitemap', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
-        db.send_create_signal('hs_party', ['GroupModel'])
+        db.send_create_signal('hs_party', ['Group'])
 
         # Adding model 'OrganizationAssociation'
         db.create_table(u'hs_party_organizationassociation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='13fcd8a2-6089-4cd5-ba98-99416d59db96', max_length=64)),
+            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='d2aaf626-18f8-466d-b245-f15131655332', max_length=64)),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.Organization'])),
             ('person', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.Person'])),
-            ('beginDate', self.gf('django.db.models.fields.DateField')(null=True)),
+            ('beginDate', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('endDate', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('jobTitle', self.gf('django.db.models.fields.CharField')(max_length='100', blank=True)),
             ('presentOrganization', self.gf('django.db.models.fields.BooleanField')(default=True)),
@@ -273,14 +301,17 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'AddressType'
-        db.delete_table(u'hs_party_addresstype')
+        # Deleting model 'Party'
+        db.delete_table(u'hs_party_party')
 
-        # Deleting model 'PhoneType'
-        db.delete_table(u'hs_party_phonetype')
+        # Deleting model 'AddressCodeList'
+        db.delete_table(u'hs_party_addresscodelist')
 
-        # Deleting model 'EmailType'
-        db.delete_table(u'hs_party_emailtype')
+        # Deleting model 'PhoneCodeList'
+        db.delete_table(u'hs_party_phonecodelist')
+
+        # Deleting model 'EmailCodeList'
+        db.delete_table(u'hs_party_emailcodelist')
 
         # Deleting model 'City'
         db.delete_table(u'hs_party_city')
@@ -291,8 +322,11 @@ class Migration(SchemaMigration):
         # Deleting model 'Country'
         db.delete_table(u'hs_party_country')
 
-        # Deleting model 'ExternalIdentifierType'
-        db.delete_table(u'hs_party_externalidentifiertype')
+        # Deleting model 'ExternalIdentifierCodeList'
+        db.delete_table(u'hs_party_externalidentifiercodelist')
+
+        # Deleting model 'NameAliasCodeList'
+        db.delete_table(u'hs_party_namealiascodelist')
 
         # Deleting model 'Person'
         db.delete_table(u'hs_party_person')
@@ -306,14 +340,17 @@ class Migration(SchemaMigration):
         # Deleting model 'PersonPhone'
         db.delete_table(u'hs_party_personphone')
 
-        # Deleting model 'UserType'
-        db.delete_table(u'hs_party_usertype')
+        # Deleting model 'PersonExternalIdentifier'
+        db.delete_table(u'hs_party_personexternalidentifier')
 
-        # Deleting model 'OtherNames'
-        db.delete_table(u'hs_party_othernames')
+        # Deleting model 'UserCodeList'
+        db.delete_table(u'hs_party_usercodelist')
 
-        # Deleting model 'OrganizationType'
-        db.delete_table(u'hs_party_organizationtype')
+        # Deleting model 'OtherName'
+        db.delete_table(u'hs_party_othername')
+
+        # Deleting model 'OrganizationCodeList'
+        db.delete_table(u'hs_party_organizationcodelist')
 
         # Deleting model 'Organization'
         db.delete_table(u'hs_party_organization')
@@ -327,14 +364,14 @@ class Migration(SchemaMigration):
         # Deleting model 'OrganizationPhone'
         db.delete_table(u'hs_party_organizationphone')
 
-        # Deleting model 'OrganizationNames'
-        db.delete_table(u'hs_party_organizationnames')
+        # Deleting model 'OrganizationName'
+        db.delete_table(u'hs_party_organizationname')
 
-        # Deleting model 'ExternalOrgIdentifiers'
-        db.delete_table(u'hs_party_externalorgidentifiers')
+        # Deleting model 'ExternalOrgIdentifier'
+        db.delete_table(u'hs_party_externalorgidentifier')
 
-        # Deleting model 'GroupModel'
-        db.delete_table(u'hs_party_groupmodel')
+        # Deleting model 'Group'
+        db.delete_table(u'hs_party_group')
 
         # Deleting model 'OrganizationAssociation'
         db.delete_table(u'hs_party_organizationassociation')
@@ -344,8 +381,8 @@ class Migration(SchemaMigration):
 
 
     models = {
-        'hs_party.addresstype': {
-            'Meta': {'object_name': 'AddressType'},
+        'hs_party.addresscodelist': {
+            'Meta': {'object_name': 'AddressCodeList'},
             'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),
@@ -372,58 +409,69 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'hs_party.emailtype': {
-            'Meta': {'object_name': 'EmailType'},
+        'hs_party.emailcodelist': {
+            'Meta': {'object_name': 'EmailCodeList'},
             'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),
             'url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
-        'hs_party.externalidentifiertype': {
-            'Meta': {'object_name': 'ExternalIdentifierType'},
+        'hs_party.externalidentifiercodelist': {
+            'Meta': {'object_name': 'ExternalIdentifierCodeList'},
             'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),
             'url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
-        'hs_party.externalorgidentifiers': {
-            'Meta': {'object_name': 'ExternalOrgIdentifiers'},
+        'hs_party.externalorgidentifier': {
+            'Meta': {'object_name': 'ExternalOrgIdentifier'},
             'createdDate': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'identifierCode': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
-            'identifierName': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.ExternalIdentifierType']", 'max_length': "'10'"}),
+            'identifierName': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.ExternalIdentifierCodeList']", 'max_length': "'10'"}),
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'externalIdentifiers'", 'to': "orm['hs_party.Organization']"}),
             'otherName': ('django.db.models.fields.CharField', [], {'max_length': "'255'", 'blank': 'True'})
         },
-        'hs_party.groupmodel': {
-            'Meta': {'object_name': 'GroupModel'},
-            'createdDate': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'lastUpdate': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
-            'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'2a6bca0b-ce2c-4211-a3df-4a3de97a2196'", 'max_length': '64'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': "'255'", 'blank': 'True'})
+        'hs_party.group': {
+            'Meta': {'object_name': 'Group', '_ormbases': ['hs_party.Party']},
+            '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'gen_description': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'in_sitemap': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            u'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
+            u'party_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['hs_party.Party']", 'unique': 'True', 'primary_key': 'True'}),
+            'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'short_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
+            'slug': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
+            'status': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
+        },
+        'hs_party.namealiascodelist': {
+            'Meta': {'object_name': 'NameAliasCodeList'},
+            'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),
+            'url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
         'hs_party.organization': {
-            'Meta': {'object_name': 'Organization'},
+            'Meta': {'object_name': 'Organization', '_ormbases': ['hs_party.Party']},
             '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'businessAddress': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
             'businessTelephone': ('django.db.models.fields.CharField', [], {'max_length': "'30'", 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'createdDate': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'gen_description': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_sitemap': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
-            'lastUpdate': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
             'logoUrl': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
-            'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'organizationType': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.OrganizationType']"}),
+            'organizationType': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.OrganizationCodeList']"}),
             'parentOrganization': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.Organization']", 'null': 'True', 'blank': 'True'}),
+            u'party_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['hs_party.Party']", 'unique': 'True', 'primary_key': 'True'}),
             'persons': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'organizations'", 'to': "orm['hs_party.Person']", 'through': "orm['hs_party.OrganizationAssociation']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'}),
             'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'short_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
@@ -432,13 +480,11 @@ class Migration(SchemaMigration):
             u'specialities_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
             'status': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'6b157862-a519-4d4c-ae4a-95f70c86bea0'", 'max_length': '64'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': "'255'", 'blank': 'True'})
+            'updated': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
         },
         'hs_party.organizationassociation': {
             'Meta': {'object_name': 'OrganizationAssociation'},
-            'beginDate': ('django.db.models.fields.DateField', [], {'null': 'True'}),
+            'beginDate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'createdDate': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'endDate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -446,67 +492,73 @@ class Migration(SchemaMigration):
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.Organization']"}),
             'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.Person']"}),
             'presentOrganization': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'28911f5f-115a-4dd5-87d9-8aa1ba0e0723'", 'max_length': '64'})
+            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'1918e3f4-4291-46ee-a2be-cd7f2c77ea30'", 'max_length': '64'})
+        },
+        'hs_party.organizationcodelist': {
+            'Meta': {'object_name': 'OrganizationCodeList'},
+            'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),
+            'url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
         'hs_party.organizationemail': {
             'Meta': {'object_name': 'OrganizationEmail'},
             'email': ('django.db.models.fields.CharField', [], {'max_length': "'30'", 'blank': 'True'}),
+            'email_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'other'", 'to': "orm['hs_party.EmailCodeList']", 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'organization': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'email_addresses'", 'null': 'True', 'to': "orm['hs_party.Organization']"}),
-            'phone_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'other'", 'to': "orm['hs_party.EmailType']", 'blank': 'True'})
+            'organization': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'email_addresses'", 'null': 'True', 'to': "orm['hs_party.Organization']"})
         },
         'hs_party.organizationlocation': {
             'Meta': {'object_name': 'OrganizationLocation'},
             'address': ('django.db.models.fields.TextField', [], {}),
-            'address_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.AddressType']"}),
+            'address_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'mailing'", 'to': "orm['hs_party.AddressCodeList']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'mail_addresses'", 'null': 'True', 'to': "orm['hs_party.Organization']"})
         },
-        'hs_party.organizationnames': {
-            'Meta': {'object_name': 'OrganizationNames'},
+        'hs_party.organizationname': {
+            'Meta': {'object_name': 'OrganizationName'},
+            'annotation': ('django.db.models.fields.related.ForeignKey', [], {'default': '700', 'to': "orm['hs_party.NameAliasCodeList']", 'max_length': "'10'"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'alternate_names'", 'null': 'True', 'to': "orm['hs_party.Organization']"}),
-            'phone_number': ('django.db.models.fields.CharField', [], {'max_length': "'30'"}),
-            'phone_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.PhoneType']", 'blank': 'True'})
+            'otherName': ('django.db.models.fields.CharField', [], {'max_length': "'255'"})
         },
         'hs_party.organizationphone': {
             'Meta': {'object_name': 'OrganizationPhone'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'phone_numbers'", 'null': 'True', 'to': "orm['hs_party.Organization']"}),
             'phone_number': ('django.db.models.fields.CharField', [], {'max_length': "'30'"}),
-            'phone_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.PhoneType']", 'blank': 'True'})
+            'phone_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'other'", 'to': "orm['hs_party.PhoneCodeList']", 'blank': 'True'})
         },
-        'hs_party.organizationtype': {
-            'Meta': {'object_name': 'OrganizationType'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),
-            'url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
-        },
-        'hs_party.othernames': {
-            'Meta': {'object_name': 'OtherNames'},
-            'annotation': ('django.db.models.fields.CharField', [], {'default': "'citation'", 'max_length': "'10'"}),
+        'hs_party.othername': {
+            'Meta': {'object_name': 'OtherName'},
+            'annotation': ('django.db.models.fields.related.ForeignKey', [], {'default': '700', 'to': "orm['hs_party.NameAliasCodeList']", 'max_length': "'10'"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'otherName': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
             'persons': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'otherNames'", 'to': "orm['hs_party.Person']"})
         },
+        'hs_party.party': {
+            'Meta': {'object_name': 'Party'},
+            'createdDate': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lastUpdate': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
+            'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'23f7d51c-ed84-489e-8722-e37f9028a766'", 'max_length': '64'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': "'255'", 'blank': 'True'})
+        },
         'hs_party.person': {
-            'Meta': {'object_name': 'Person'},
+            'Meta': {'object_name': 'Person', '_ormbases': ['hs_party.Party']},
             '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'createdDate': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'familyName': ('django.db.models.fields.CharField', [], {'max_length': "'125'"}),
             'gen_description': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'givenName': ('django.db.models.fields.CharField', [], {'max_length': "'125'"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_sitemap': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'jobTitle': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
             u'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
-            'lastUpdate': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
-            'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            u'party_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['hs_party.Party']", 'unique': 'True', 'primary_key': 'True'}),
             'primaryAddress': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
             'primaryOrganizationName': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
             'primaryOrganizationRecord': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'+'", 'null': 'True', 'to': "orm['hs_party.Organization']"}),
@@ -517,21 +569,28 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
             'status': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'b3c32336-fa3f-4424-87f2-380a882378b2'", 'max_length': '64'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': "'255'", 'blank': 'True'})
+            'updated': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
         },
         'hs_party.personemail': {
             'Meta': {'object_name': 'PersonEmail'},
             'email': ('django.db.models.fields.CharField', [], {'max_length': "'30'", 'blank': 'True'}),
+            'email_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'other'", 'to': "orm['hs_party.EmailCodeList']", 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'person': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'email_addresses'", 'null': 'True', 'to': "orm['hs_party.Person']"}),
-            'phone_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'other'", 'to': "orm['hs_party.EmailType']", 'blank': 'True'})
+            'person': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'email_addresses'", 'null': 'True', 'to': "orm['hs_party.Person']"})
+        },
+        'hs_party.personexternalidentifier': {
+            'Meta': {'object_name': 'PersonExternalIdentifier'},
+            'createdDate': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'identifierCode': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
+            'identifierName': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.ExternalIdentifierCodeList']", 'max_length': "'10'"}),
+            'otherName': ('django.db.models.fields.CharField', [], {'max_length': "'255'", 'blank': 'True'}),
+            'person': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'externalIdentifiers'", 'to': "orm['hs_party.Person']"})
         },
         'hs_party.personlocation': {
             'Meta': {'object_name': 'PersonLocation'},
             'address': ('django.db.models.fields.TextField', [], {}),
-            'address_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.AddressType']"}),
+            'address_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'mailing'", 'to': "orm['hs_party.AddressCodeList']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'person': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'mail_addresses'", 'null': 'True', 'to': "orm['hs_party.Person']"})
         },
@@ -540,10 +599,10 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'person': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'phone_numbers'", 'null': 'True', 'to': "orm['hs_party.Person']"}),
             'phone_number': ('django.db.models.fields.CharField', [], {'max_length': "'30'"}),
-            'phone_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.PhoneType']", 'blank': 'True'})
+            'phone_type': ('django.db.models.fields.related.ForeignKey', [], {'default': "'other'", 'to': "orm['hs_party.PhoneCodeList']", 'blank': 'True'})
         },
-        'hs_party.phonetype': {
-            'Meta': {'object_name': 'PhoneType'},
+        'hs_party.phonecodelist': {
+            'Meta': {'object_name': 'PhoneCodeList'},
             'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),
@@ -555,8 +614,8 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'hs_party.usertype': {
-            'Meta': {'object_name': 'UserType'},
+        'hs_party.usercodelist': {
+            'Meta': {'object_name': 'UserCodeList'},
             'code': ('django.db.models.fields.CharField', [], {'max_length': '24', 'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'order': ('django.db.models.fields.IntegerField', [], {'blank': 'True'}),

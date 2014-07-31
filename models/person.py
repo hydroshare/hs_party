@@ -16,8 +16,11 @@ from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.urlresolvers import reverse
 
-from party import PartyModel
-from party_types import PartyEmailModel,PartyGeolocation,PartyPhoneModel,PartyLocationModel
+from party import Party
+from party_types import PartyEmailModel,PartyGeolocation,\
+    PartyPhoneModel,PartyLocationModel,\
+    ExternalIdentifierCodeList,\
+    NameAliasType
 
 
 
@@ -30,7 +33,7 @@ __author__ = 'valentin'
 #======================================================================================
 
 
-class Person(Displayable,PartyModel):
+class Person(Displayable,Party):
 
     # name is the only required field: Science spec
     # fields from vcard.
@@ -164,7 +167,25 @@ class PersonPhone(PartyPhoneModel):
     pass
 
 
+class PersonExternalIdentifier(models.Model):
+    person = models.ForeignKey(to=Person, related_name='externalIdentifiers')
+    IDENTIFIER_CHOICE = (
+                         ("LOC", "Library of Congress")
+                         , ("NSF", "National Science Foundation")
+                         , ("linked","linked Data URL")
+                         , ("twitter", "twitterHandle")
+                         , ("ProjectPage", "page for project")
+                         , ("other", "other")
+    )
+    identifierName = models.ForeignKey(ExternalIdentifierCodeList, verbose_name="User Identities",
+                                      help_text="User identities from external sites",max_length='10')
+    otherName = models.CharField(verbose_name="If other is selected, type of identifier", blank=True,max_length='255')
+    identifierCode = models.CharField(verbose_name="Username or Identifier for site",max_length='255')
+    createdDate = models.DateField(auto_now_add=True)
+    # validation needed. if identifierName =='other' then otherName must be populated.
 
+    class Meta:
+        app_label = 'hs_party'
 
 
 # class UserKeywords(models.Model):
@@ -173,7 +194,7 @@ class PersonPhone(PartyPhoneModel):
 #     createdDate = models.DateField(auto_now_add=True)
 #     pass
 
-class UserType(models.Model):
+class UserCodeList(models.Model):
     # these are classes, so changing the model means you change this
     code = models.CharField(primary_key=True,verbose_name="Code Choice Item", max_length=24, blank=False)
     name = models.CharField(verbose_name="Brief Name of Choice Item",max_length=255, blank=False)
@@ -187,18 +208,18 @@ class UserType(models.Model):
         app_label = 'hs_party'
 
 
-class OtherNames(models.Model):
+class OtherName(NameAliasType):
     #ID = models.AutoField(primary_key=True)
-    # relation will show in PartyModel as otherNames
+    # relation will show in Party as otherNames
     persons = models.ForeignKey(to=Person,related_name='otherNames' )
-    otherName = models.CharField(verbose_name="Other Name or alias",max_length='255')
-    ANNOTATION_TYPE_CHOICE = (
-        ("change", "Name Change"),
-        ("citation", "Publishing Alias"),
-        ("fullname", "Full Name variation"),
-        ("other", "other type of alias")
-    )
-    annotation = models.CharField(verbose_name="type of alias", default="citation",max_length='10')
+    # otherName = models.CharField(verbose_name="Other Name or alias",max_length='255')
+    # ANNOTATION_TYPE_CHOICE = (
+    #     ("change", "Name Change"),
+    #     ("citation", "Publishing Alias"),
+    #     ("fullname", "Full Name variation"),
+    #     ("other", "other type of alias")
+    # )
+    # annotation = models.CharField(verbose_name="type of alias", default="other",max_length='10')
 
 
 
