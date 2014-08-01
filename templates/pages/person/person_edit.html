@@ -9,6 +9,10 @@
    <fieldset class="model">
 
 {%  fields_for form %}
+
+       {% for f in form.addresses %}
+       {% fields_for f %}
+       {% endfor %}
        <input class="btn btn-warning btn-lg" type="submit" value="Save Edits" action=""/>
 </fieldset>
        </form>

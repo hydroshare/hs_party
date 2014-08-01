@@ -9,6 +9,9 @@
 <table>
     {% csrf_token %}
     {{  form }}
+    {% for forms in formset %}
+        {{ forms.name }}
+    {% endfor %}
 </table>
 
 <input type="submit"/>

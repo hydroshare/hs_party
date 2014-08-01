@@ -35,10 +35,46 @@
      <td>Primary Address</td>
      <td>{{ person.primaryAddress }}</td>
  </tr>
+ {%  if person.mail_addresses %}
+    <tr>
+     <td>Other Address</td>
+     <td><table>
+         {%  for add in person.mail_addresses.all %}
+         <tr><th>{{ add.address_type.name }}</th>
+         <td>{{ add.address }}</td></tr>
+     {% endfor %}
+     </table></td>
+ </tr>
+ {% endif %}
+
     <tr>
      <td>Primary Telephon</td>
      <td>{{ person.primaryTelephone }}</td>
  </tr>
+
+  {%  if person.phone_numbers %}
+    <tr>
+     <td>Other Phone</td>
+     <td><table>
+         {%  for o in person.phone_numbers.all %}
+         <tr><th>{{ o.phone_type.name }}</th>
+         <td>{{ o.phone_number }}</td>
+         </tr>
+     {% endfor %}
+     </table></td>
+ </tr>
+{% endif %}
+   {%  if person.email_addresses %}
+    <tr>
+     <td>Email Contacts</td>
+     <td><table>
+         {%  for o in person.email_addresses.all %}
+         <tr><th>{{ o.email_type.name }}</th>
+         <td>{{ o.email }}</td></tr>
+     {% endfor %}
+     </table></td>
+ </tr>
+ {% endif %}
   <tr>
      <td>Biography or Short Note</td>
      <td>{{ person.notes }}</td>
