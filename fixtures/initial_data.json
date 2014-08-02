@@ -110,7 +110,7 @@
         "model": "hs_party.UserCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other type of user",
             "order": "1"
 
         }
@@ -121,7 +121,7 @@
         "model": "hs_party.UserCodeList",
         "fields": {
             "code": "Unspecified",
-            "name": "Unspecified",
+            "name": "Unspecified type of user",
             "order": "1"
 
         }
@@ -132,7 +132,7 @@
         "model": "hs_party.OrganizationCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other or Unknown Organization",
             "order": "1"
 
         }
@@ -142,7 +142,7 @@
         "model": "hs_party.OrganizationCodeList",
         "fields": {
             "code": "commercial",
-            "name": "Commercial/Professional",
+            "name": "Commercial/Professional Organization",
             "order": "2"
 
         }
@@ -152,7 +152,7 @@
         "model": "hs_party.OrganizationCodeList",
         "fields": {
             "code": "university",
-            "name": "University",
+            "name": "University Organization",
             "order": "3"
 
         }
@@ -212,7 +212,7 @@
         "model": "hs_party.OrganizationCodeList",
         "fields": {
             "code": "unspecified",
-            "name": "Unspecified",
+            "name": "Unspecified Organization",
             "order": "9"
 
         }
@@ -223,7 +223,7 @@
         "model": "hs_party.AddressCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other address",
             "order": "1"
 
         }
@@ -233,7 +233,7 @@
         "model": "hs_party.AddressCodeList",
         "fields": {
             "code": "home",
-            "name": "home",
+            "name": "Home Address",
             "order": "1"
 
         }
@@ -243,7 +243,7 @@
         "model": "hs_party.AddressCodeList",
         "fields": {
             "code": "work",
-            "name": "work",
+            "name": "Work Address",
             "order": "1"
 
         }
@@ -254,8 +254,18 @@
         "model": "hs_party.AddressCodeList",
         "fields": {
             "code": "mailing",
-            "name": "mailing",
+            "name": "Mailing Address",
             "order": "1"
+
+        }
+    },
+    {
+        "pk": "304",
+        "model": "hs_party.AddressCodeList",
+        "fields": {
+            "code": "primary",
+            "name": "Primary Mailing Address",
+            "order": "99"
 
         }
     }
@@ -265,7 +275,7 @@
         "model": "hs_party.PhoneCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other Phone",
             "order": "1"
 
         }
@@ -275,7 +285,7 @@
         "model": "hs_party.PhoneCodeList",
         "fields": {
             "code": "work",
-            "name": "work",
+            "name": "Work Phone",
             "order": "1"
 
         }
@@ -285,7 +295,7 @@
         "model": "hs_party.PhoneCodeList",
         "fields": {
             "code": "cell",
-            "name": "cell",
+            "name": "Cell Phone",
             "order": "1"
 
         }
@@ -295,7 +305,7 @@
         "model": "hs_party.PhoneCodeList",
         "fields": {
             "code": "main",
-            "name": "main",
+            "name": "Main Phone for Company",
             "order": "1"
 
         }
@@ -305,7 +315,7 @@
         "model": "hs_party.PhoneCodeList",
         "fields": {
             "code": "home",
-            "name": "home",
+            "name": "Home Phone",
             "order": "1"
 
         }
@@ -315,7 +325,7 @@
         "model": "hs_party.PhoneCodeList",
         "fields": {
             "code": "main",
-            "name": "main company phone",
+            "name": "Main company phone",
             "order": "1"
 
         }
@@ -326,7 +336,7 @@
         "model": "hs_party.PhoneCodeList",
         "fields": {
             "code": "fax",
-            "name": "fax",
+            "name": "Fax",
             "order": "1"
 
         }
@@ -337,7 +347,7 @@
         "model": "hs_party.EmailCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other Email",
             "order": "1"
 
         }
@@ -347,7 +357,7 @@
         "model": "hs_party.EmailCodeList",
         "fields": {
             "code": "personal",
-            "name": "personal",
+            "name": "Personal Email",
             "order": "1"
 
         }
@@ -358,7 +368,7 @@
         "model": "hs_party.EmailCodeList",
         "fields": {
             "code": "work",
-            "name": "work",
+            "name": "Work Email",
             "order": "1"
 
         }
@@ -368,7 +378,7 @@
         "model": "hs_party.EmailCodeList",
         "fields": {
             "code": "support",
-            "name": "support",
+            "name": "Support Email",
             "order": "1"
 
         }
@@ -379,7 +389,7 @@
         "model": "hs_party.ExternalIdentifierCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other type of Identifier",
             "order": "1"
 
         }
@@ -389,7 +399,7 @@
         "model": "hs_party.ExternalIdentifierCodeList",
         "fields": {
             "code": "orcid",
-            "name": "ORCID user idntifier",
+            "name": "ORCID User Identifier",
             "order": "1",
             "url": "http://www.example.com"
 
@@ -400,7 +410,7 @@
         "model": "hs_party.ExternalIdentifierCodeList",
         "fields": {
             "code": "twitter",
-            "name": "twitter",
+            "name": "Twitter Identity",
             "order": "1"
 
         }
@@ -410,7 +420,7 @@
         "model": "hs_party.ExternalIdentifierCodeList",
         "fields": {
             "code": "facebook",
-            "name": "facebook",
+            "name": "Facebook Identity",
             "order": "1"
 
         }
@@ -420,7 +430,7 @@
         "model": "hs_party.ExternalIdentifierCodeList",
         "fields": {
             "code": "google",
-            "name": "google",
+            "name": "Google Identity",
             "order": "1"
 
         }
@@ -430,7 +440,7 @@
         "model": "hs_party.ExternalIdentifierCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other Identity",
             "order": "1"
 
         }
@@ -440,7 +450,7 @@
         "model": "hs_party.NameAliasCodeList",
         "fields": {
             "code": "other",
-            "name": "other",
+            "name": "Other Alternate Name",
             "order": "9"
 
         }
@@ -472,7 +482,7 @@
         "model": "hs_party.NameAliasCodeList",
         "fields": {
             "code": "fullname",
-            "name": "Full Name",
+            "name": "Full Name, or Alternate Full Name",
             "order": "3"
 
         }
@@ -494,8 +504,8 @@
         "fields": {
             "lastUpdate": "2014-07-30",
             "name": "Default Organization",
-            "url": "",
-            "notes": "",
+            "url": "http://www.hydroshare.org/",
+            "notes": "This is a generic organization",
             "createdDate": "2014-07-30",
             "uniqueCode": "61255288-9b62-4e87-8bf7-fed434af5824"
         }
@@ -521,14 +531,12 @@
             "parentOrganization": null,
             "description": "Default Organization",
             "title": "",
-            "businessAddress": "",
             "short_url": null,
             "created": "2014-07-30T22:02:09.184Z",
             "site": 1,
             "in_sitemap": true,
             "keywords_string": "",
             "_meta_title": null,
-            "businessTelephone": "",
             "specialities_string": "",
             "expiry_date": null,
             "publish_date": "2014-07-30T22:02:09.109Z",
@@ -543,8 +551,8 @@
         "model": "hs_party.organizationlocation",
         "fields": {
             "organization": 1,
-            "address_type": "mailing",
-            "address": "A mailing address"
+            "address_type": "primary",
+            "address": "123 street address, logan, UT"
         }
     },
     {
@@ -567,16 +575,13 @@
             "title": "",
             "short_url": null,
             "created": "2014-07-30T22:06:02.712Z",
-            "primaryAddress": "",
             "site": 1,
             "in_sitemap": true,
             "keywords_string": "",
             "_meta_title": null,
-            "primaryTelephone": "",
             "expiry_date": null,
             "publish_date": "2014-07-30T22:06:02.633Z",
             "jobTitle": "",
-            "primaryOrganizationName": "",
             "givenName": "Sandy",
             "slug": "",
             "gen_description": true,
@@ -597,7 +602,7 @@
         "model": "hs_party.personlocation",
         "fields": {
             "person": 2,
-            "address_type": "other",
+            "address_type": "primary",
             "address": "123 Street Address\r\nLogan, UT"
         }
     },

@@ -41,11 +41,11 @@ class PartyApiTests(TestCase):
         self.oa1 = OrganizationAssociation.objects.create(person=self.aPerson,organization=self.org2)
 
 
-    def test_coreapi_api(self):
-        plist = reverse('api_dispatch_list', kwargs={'resource_name': 'genericresource','api_name':'v1'})
-        response = self.client.get(plist)
-        self.assertEqual(response.status_code, 401) # not authorized shows working
-        #self.assertEqual(response.status_code, 200)
+    # def test_coreapi_api(self):
+    #     plist = reverse('api_dispatch_list', kwargs={'resource_name': 'genericresource','api_name':'v1'})
+    #     response = self.client.get(plist)
+    #     self.assertEqual(response.status_code, 401) # not authorized shows working
+    #     #self.assertEqual(response.status_code, 200)
 
     def test_organizational_code_list_api(self):
         plist = reverse('api_dispatch_list', kwargs={'resource_name': 'organization_types','api_name':'v1'})
@@ -122,7 +122,8 @@ class PartyApiTests(TestCase):
 
 
         #person = ares.obj_get( pk=self.aPerson.pk)
-        org = Organization.objects.get(pk=self.org2.pk)
+        #org = Organization.objects.get(pk=self.org2.pk)
+        org = Organization.objects.get(name='Default Organization')
         #ares_bundle = ares.build_bundle(obj=person,request=request)
         ares_bundle = ares.build_bundle(obj=org)
         xml_response = ares.serialize(None,ares.full_dehydrate(ares_bundle),'application/rdf+xml')

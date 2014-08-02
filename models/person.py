@@ -20,7 +20,7 @@ from party import Party
 from party_types import PartyEmailModel,PartyGeolocation,\
     PartyPhoneModel,PartyLocationModel,\
     ExternalIdentifierCodeList,\
-    NameAliasType
+    NameAliasType, AddressCodeList
 
 
 
@@ -46,10 +46,29 @@ class Person(Displayable,Party):
 
     #cellPhone = models.CharField(verbose_name="Cell Phone", blank=True,max_length='30')  # sciencebase
     # do we want some adviser field.
-    primaryOrganizationName = models.CharField(max_length='100', blank=True, verbose_name="Primary Organization", help_text="Primary Organization, if known")
-    primaryAddress = models.CharField(max_length='100', blank=True, verbose_name="Primary Address", help_text="Primary Mailing or Street, if known")
-    primaryTelephone = models.CharField(max_length='30', blank=True, verbose_name="Primary Telephone",help_text="Primary Telephone, if known")
+    #primaryOrganizationName = models.CharField(max_length='100', blank=True, verbose_name="Primary Organization", help_text="Primary Organization, if known")
+    #primaryAddress = models.CharField(max_length='100', blank=True, verbose_name="Primary Address", help_text="Primary Mailing or Street, if known")
+    #primaryTelephone = models.CharField(max_length='30', blank=True, verbose_name="Primary Telephone",help_text="Primary Telephone, if known")
     primaryOrganizationRecord = models.ForeignKey('Organization', null=True, blank=True,related_name="+")
+
+    @property
+    def primaryOrganizationName(self):
+        return self.primaryOrganizationRecord.name
+
+    @property
+    def primaryAddress(self):
+        paddr = self.mail_addresses.filter(address_type='primary')
+        return paddr.address
+
+    @primaryAddress.setter
+    def primaryAddress(self, value):
+        paddr = self.mail_addresses.filter(address_type='primary')
+        if (paddr):
+            paddr.address = value
+        else:
+            primaryType = AddressCodeList.objects.get(code='primary')
+            address =  PersonLocation(address_type=primaryType,address=value)
+            self.mail_addresses.add(address)
 
     def get_absolute_url(self):
         return reverse('person_detail', kwargs={'pk': self.pk})

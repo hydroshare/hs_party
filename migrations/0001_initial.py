@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         # Adding model 'Party'
         db.create_table(u'hs_party_party', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='55c20183-c0c7-40ce-8687-74d03a1f5905', max_length=64)),
+            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='dee17e4f-e35e-498d-b9f5-04b1553e5107', max_length=64)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length='255')),
             ('url', self.gf('django.db.models.fields.URLField')(max_length='255', blank=True)),
             ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
@@ -109,9 +109,6 @@ class Migration(SchemaMigration):
             ('givenName', self.gf('django.db.models.fields.CharField')(max_length='125')),
             ('familyName', self.gf('django.db.models.fields.CharField')(max_length='125')),
             ('jobTitle', self.gf('django.db.models.fields.CharField')(max_length='100', blank=True)),
-            ('primaryOrganizationName', self.gf('django.db.models.fields.CharField')(max_length='100', blank=True)),
-            ('primaryAddress', self.gf('django.db.models.fields.CharField')(max_length='100', blank=True)),
-            ('primaryTelephone', self.gf('django.db.models.fields.CharField')(max_length='30', blank=True)),
             ('primaryOrganizationRecord', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='+', null=True, to=orm['hs_party.Organization'])),
         ))
         db.send_create_signal('hs_party', ['Person'])
@@ -202,8 +199,6 @@ class Migration(SchemaMigration):
             ('logoUrl', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
             ('parentOrganization', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.Organization'], null=True, blank=True)),
             ('organizationType', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.OrganizationCodeList'])),
-            ('businessAddress', self.gf('django.db.models.fields.CharField')(max_length='100', blank=True)),
-            ('businessTelephone', self.gf('django.db.models.fields.CharField')(max_length='30', blank=True)),
         ))
         db.send_create_signal('hs_party', ['Organization'])
 
@@ -278,7 +273,7 @@ class Migration(SchemaMigration):
         db.create_table(u'hs_party_organizationassociation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('createdDate', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='d2aaf626-18f8-466d-b245-f15131655332', max_length=64)),
+            ('uniqueCode', self.gf('django.db.models.fields.CharField')(default='5233b8ca-139d-4eb0-bc6c-c48403cb9b57', max_length=64)),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.Organization'])),
             ('person', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['hs_party.Person'])),
             ('beginDate', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
@@ -460,8 +455,6 @@ class Migration(SchemaMigration):
         'hs_party.organization': {
             'Meta': {'object_name': 'Organization', '_ormbases': ['hs_party.Party']},
             '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'businessAddress': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
-            'businessTelephone': ('django.db.models.fields.CharField', [], {'max_length': "'30'", 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
@@ -492,7 +485,7 @@ class Migration(SchemaMigration):
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.Organization']"}),
             'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['hs_party.Person']"}),
             'presentOrganization': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'1918e3f4-4291-46ee-a2be-cd7f2c77ea30'", 'max_length': '64'})
+            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'36ca4dd0-8dd2-450a-a084-dc42d88437be'", 'max_length': '64'})
         },
         'hs_party.organizationcodelist': {
             'Meta': {'object_name': 'OrganizationCodeList'},
@@ -543,7 +536,7 @@ class Migration(SchemaMigration):
             'lastUpdate': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
             'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'23f7d51c-ed84-489e-8722-e37f9028a766'", 'max_length': '64'}),
+            'uniqueCode': ('django.db.models.fields.CharField', [], {'default': "'8e8bdd79-05cb-444d-ad4e-bb7716dadb16'", 'max_length': '64'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': "'255'", 'blank': 'True'})
         },
         'hs_party.person': {
@@ -559,10 +552,7 @@ class Migration(SchemaMigration):
             'jobTitle': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
             u'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
             u'party_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['hs_party.Party']", 'unique': 'True', 'primary_key': 'True'}),
-            'primaryAddress': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
-            'primaryOrganizationName': ('django.db.models.fields.CharField', [], {'max_length': "'100'", 'blank': 'True'}),
             'primaryOrganizationRecord': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'+'", 'null': 'True', 'to': "orm['hs_party.Organization']"}),
-            'primaryTelephone': ('django.db.models.fields.CharField', [], {'max_length': "'30'", 'blank': 'True'}),
             'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'short_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),

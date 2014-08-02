@@ -5,11 +5,13 @@
 
 <h1>{{ person.name }}</h1>
     {% if request.user.is_authenticated %}
- <a href="{%   url 'person_edit' person.pk %}">
+ <a  class="btn btn-default" href="{%   url 'person_edit' person.pk %}">
                       Edit {{ person.name }} </a>
     {%  endif %}
+<a class="btn btn-default" href="{%  url 'api_dispatch_detail' resource_name='person'  api_name='v1' pk=person.pk %}?format=json">JSON</a>
+<a class="btn btn-default" href="{%  url 'api_dispatch_detail' resource_name='person'  api_name='v1' pk=person.pk %}?format=rdf">RDF</a>
 
- <table class="table">
+    <table class="table">
  <tr>
      <td>Family Name</td>
      <td>{{ person.familyName }}</td>
@@ -18,6 +20,17 @@
      <td>First or Given Name</td>
      <td>{{ person.givenName }}</td>
  </tr>
+  {%  if person.otherNames %}
+    <tr>
+     <td>Also Know As</td>
+     <td><table>
+         {%  for n in  person.otherNames.all %}
+         <tr>
+         <td>{{ n.otherName }}</td><th> ({{ n.annotation.name }})</th></tr>
+     {% endfor %}
+     </table></td>
+ </tr>
+ {% endif %}
   <tr>
      <td>Primary Organization</td>
      <td> {%  if person.primaryOrganizationRecord %}
@@ -31,34 +44,37 @@
      <td>Job Title</td>
      <td>{{ person.jobTitle }}</td>
  </tr>
-   <tr>
+{% comment %}   <tr>
      <td>Primary Address</td>
      <td>{{ person.primaryAddress }}</td>
  </tr>
+{% endcomment %}
  {%  if person.mail_addresses %}
     <tr>
      <td>Other Address</td>
      <td><table>
          {%  for add in person.mail_addresses.all %}
-         <tr><th>{{ add.address_type.name }}</th>
-         <td>{{ add.address }}</td></tr>
+         <tr>
+         <td>{{ add.address }}</td><th> ({{ add.address_type.name }})</th></tr>
      {% endfor %}
      </table></td>
  </tr>
  {% endif %}
-
+{% comment %}
     <tr>
      <td>Primary Telephon</td>
      <td>{{ person.primaryTelephone }}</td>
  </tr>
+{% endcomment %}
 
   {%  if person.phone_numbers %}
     <tr>
      <td>Other Phone</td>
      <td><table>
          {%  for o in person.phone_numbers.all %}
-         <tr><th>{{ o.phone_type.name }}</th>
+         <tr>
          <td>{{ o.phone_number }}</td>
+         <th>({{ o.phone_type.name }})</th>
          </tr>
      {% endfor %}
      </table></td>
@@ -69,8 +85,10 @@
      <td>Email Contacts</td>
      <td><table>
          {%  for o in person.email_addresses.all %}
-         <tr><th>{{ o.email_type.name }}</th>
-         <td>{{ o.email }}</td></tr>
+         <tr>
+         <td>{{ o.email }}</td>
+             <th>({{ o.email_type.name }})</th>
+         </tr>
      {% endfor %}
      </table></td>
  </tr>

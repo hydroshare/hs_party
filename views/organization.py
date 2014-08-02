@@ -36,7 +36,8 @@ class OrganizationCreate(CreateView):
     model = Organization
     template_name = "pages/orgs/organization_create.html"
     fields = ["name","organizationType","specialities","logoUrl",
-              "businessAddress","businessTelephone","logoUrl","notes","parentOrganization"]
+    #          "businessAddress","businessTelephone",
+              "logoUrl","notes","parentOrganization"]
 
 class OrganizationDetail(DetailView):
     model = Organization

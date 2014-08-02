@@ -44,10 +44,13 @@ class OrganizationResource(ModelResource):
         queryset = Organization.objects.all()
         resource_name = 'organization'
         serializer=OrganizationFFoafSerializer()
-        excludes = ['createdDate', 'lastUpdate']
+        excludes = ['createdDate', 'lastUpdate','_meta_title','status',
+         'expiry_date',   'gen_description',   'in_sitemap' ,
+        'keywords_string','publish_date','slug','updated' ]
         filtering = {
             'name': ALL,
         }
+
         #authentication = MultiAuthentication(BasicAuthentication(), ApiKeyAuthentication(), SessionAuthentication())
         # make it so only superusers and people with express permission can modify / create user objects
         #authorization = DjangoAuthorization()
@@ -64,6 +67,9 @@ class OrganizationalCodeListResource(ModelResource):
         filtering = {
             'name': ALL,
         }
+        excludes = ['createdDate', 'lastUpdate','_meta_title','status',
+         'expiry_date',   'gen_description',   'in_sitemap' ,
+        'keywords_string','publish_date','slug','updated' ]
         #authentication = MultiAuthentication(BasicAuthentication(), ApiKeyAuthentication(), SessionAuthentication())
         # make it so only superusers and people with express permission can modify / create group objects
         #authorization = DjangoAuthorization()

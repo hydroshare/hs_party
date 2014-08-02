@@ -22,7 +22,7 @@ ALTNAME1='Alt 1'
 ALTNAME2='Alt2'
 
 def otherNameAliasType():
-   return NameAliasCodeList.objects.get(name='other')
+   return NameAliasCodeList.objects.get(code='other')
 
 def PersonCore():
     return Person(givenName=FIRST1, familyName=LAST1, name=NAME1)
@@ -77,7 +77,7 @@ class PersonTest(TestCase):
 
         person2 = Person.objects.get(familyName=LAST2)
         self.assertEqual(person2.otherNames.count(),2)
-        self.assertEquals(person2.otherNames.get(otherName=ALTNAME1).annotation.name, 'other')
+        self.assertEquals(person2.otherNames.get(otherName=ALTNAME1).annotation.code, 'other')
         self.assertIsNotNone(person2.uniqueCode)
         print("uuid:" + person2.uniqueCode)
 

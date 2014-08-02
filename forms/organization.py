@@ -19,7 +19,8 @@ class OrganizationEditorForm(ModelForm):
     class Meta:
         model = Organization
         fields = ["name","organizationType","specialities","logoUrl",
-              "businessAddress","businessTelephone","logoUrl","notes","parentOrganization"]
+           #   "businessAddress","businessTelephone",
+              "logoUrl","notes","parentOrganization"]
         widgets = {
             'notes': Textarea(attrs={'cols': 80, 'rows': 6}),
         }

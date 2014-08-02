@@ -37,7 +37,10 @@ class PersonList(ListView):
 class PersonCreate(CreateView):
     model = Person
     template_name = "pages/person/person_create.html"
-    fields = ["name",'givenName','familyName','primaryOrganizationRecord','primaryAddress','notes']
+    fields = ["name",'givenName','familyName',
+             'primaryOrganizationRecord',
+            # 'primaryAddress',
+              'notes']
 
 #@login_required
 class PersonEdit(UpdateView):

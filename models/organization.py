@@ -20,7 +20,7 @@ from party import Party
 from party_types import PartyEmailModel,\
     PartyGeolocation,PartyPhoneModel,\
     PartyLocationModel,ExternalIdentifierCodeList,\
-    NameAliasType
+    NameAliasType,AddressCodeList
 from person import Person
 
 
@@ -70,8 +70,24 @@ class Organization(Displayable,Party):
     ,)
 
 
-    businessAddress = models.CharField(max_length='100', blank=True, verbose_name="business Address", help_text="business Mailing or Street, if known")
-    businessTelephone = models.CharField(max_length='30', blank=True, verbose_name="business Telephone",help_text="business Telephone, if known")
+    #businessAddress = models.CharField(max_length='100', blank=True, verbose_name="business Address", help_text="business Mailing or Street, if known")
+    #businessTelephone = models.CharField(max_length='30', blank=True, verbose_name="business Telephone",help_text="business Telephone, if known")
+
+    @property
+    def businessAddress(self):
+        paddr = self.mail_addresses.filter(address_type='primary')
+        return paddr.address
+
+    @businessAddress.setter
+    def businessAddress(self, value):
+        paddr = self.mail_addresses.filter(address_type='primary')
+        if (paddr):
+            paddr.address = value
+        else:
+            primaryType = AddressCodeList.objects.get(code='primary')
+            address =  OrganizationLocation(address_type=primaryType,address=value)
+            self.mail_addresses.add(address)
+
 
     def get_absolute_url(self):
         return reverse('organization_detail', kwargs={'pk': self.pk})

@@ -21,7 +21,10 @@ class PersonEditorForm(ModelForm):
         )
     class Meta:
         model = Person
-        fields = ( 'name','givenName','familyName','primaryOrganizationRecord','jobTitle','notes','url','primaryAddress',"primaryTelephone")
+        fields = ( 'name','givenName','familyName','primaryOrganizationRecord',
+                   'jobTitle','notes','url',
+        #           'primaryAddress',"primaryTelephone"
+        )
         widgets = {
             'notes': Textarea(attrs={'cols': 80, 'rows': 6}),
         }
