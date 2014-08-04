@@ -2,10 +2,10 @@ from __future__ import absolute_import
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 #from django_webtest import WebTest
-from ..models.organization import Organization,OrganizationCodeList,ExternalOrgIdentifier
+from ..models.organization import Organization,OrganizationCodeList,ExternalOrgIdentifier,OrganizationLocation,OrganizationPhone
 from ..models.person import    Person
 from ..models.organization_association import OrganizationAssociation
-from ..models.party_types import  ExternalIdentifierCodeList
+from ..models.party_types import  ExternalIdentifierCodeList,AddressCodeList,PhoneCodeList
 from datetime import date
 
 
@@ -83,5 +83,48 @@ class organizationTest(TestCase):
         org2 =  Organization.objects.get(name="org2")
         org3 = Organization.objects.get(name="org3")
         self.assertEqual(org3.parentOrganization, org2)
+
+    def test_businessAddress_get(self):
+        org1 = Organization.objects.get(name="Default Organization")
+
+        addr = OrganizationLocation.objects.filter(organization=org1,address_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().address, org1.businessAddress)
+
+
+    def test_businessAddress_set(self):
+        org1 = Organization.objects.get(name="Default Organization")
+        ADDRESS = "setNewAddress"
+        org1.businessAddress = ADDRESS
+        self.assertEqual(ADDRESS, org1.businessAddress)
+
+        addr = OrganizationLocation.objects.filter(organization=org1,address_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().address, org1.businessAddress)
+
+    def test_businessAddress_addnew(self):
+        self.assertIsNotNone(self.org2)
+        self.assertFalse(self.org2.businessAddress)
+        ADDRESS = "setNewAddress"
+        address_type = AddressCodeList.objects.get(code='primary')
+        self.org2.businessAddress = ADDRESS
+        self.assertEqual(ADDRESS, self.org2.businessAddress)
+
+        addr = OrganizationLocation.objects.filter(organization=self.org2,address_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().address, self.org2.businessAddress)
+
+
+    def test_businessTelephone_addnew(self):
+        self.assertIsNotNone(self.org2)
+        self.assertFalse(self.org2.businessTelephone)
+        ADDRESS = "setNewAddress"
+        address_type = PhoneCodeList.objects.get(code='primary')
+        self.org2.businessTelephone = ADDRESS
+        self.assertEqual(ADDRESS, self.org2.businessTelephone)
+
+        phones = OrganizationPhone.objects.filter(organization=self.org2,phone_type__code='primary')
+        self.assertEqual(phones.count(),1)
+        self.assertEqual(phones.first().phone_number, self.org2.businessTelephone)
 
 pass

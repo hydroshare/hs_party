@@ -341,6 +341,17 @@
 
         }
     }
+       ,
+    {
+        "pk": "407",
+        "model": "hs_party.PhoneCodeList",
+        "fields": {
+            "code": "primary",
+            "name": "Primary Phone Number",
+            "order": "99"
+
+        }
+    }
     ,
     {
         "pk": "500",

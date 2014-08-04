@@ -20,7 +20,7 @@ from party import Party
 from party_types import PartyEmailModel,\
     PartyGeolocation,PartyPhoneModel,\
     PartyLocationModel,ExternalIdentifierCodeList,\
-    NameAliasType,AddressCodeList
+    NameAliasType,AddressCodeList,PhoneCodeList
 from person import Person
 
 
@@ -73,21 +73,51 @@ class Organization(Displayable,Party):
     #businessAddress = models.CharField(max_length='100', blank=True, verbose_name="business Address", help_text="business Mailing or Street, if known")
     #businessTelephone = models.CharField(max_length='30', blank=True, verbose_name="business Telephone",help_text="business Telephone, if known")
 
-    @property
-    def businessAddress(self):
-        paddr = self.mail_addresses.filter(address_type='primary')
-        return paddr.address
 
-    @businessAddress.setter
-    def businessAddress(self, value):
+
+    def get_businessAddress(self):
         paddr = self.mail_addresses.filter(address_type='primary')
         if (paddr):
-            paddr.address = value
+            return paddr.first().address
+        else:
+            return None
+
+    def set_businessAddress(self, value):
+        paddr = self.mail_addresses.filter(address_type='primary')
+        if (paddr):
+            firstOne = paddr.first()
+            firstOne.address = value
+            firstOne.save()
         else:
             primaryType = AddressCodeList.objects.get(code='primary')
             address =  OrganizationLocation(address_type=primaryType,address=value)
             self.mail_addresses.add(address)
+            self.save()
 
+    businessAddress = property(get_businessAddress,set_businessAddress)
+
+
+    def get_businessTelephone(self):
+        phone1 = self.phone_numbers.filter(phone_type='primary')
+        if (phone1):
+            return phone1.first().phone_number
+        else:
+            return None
+
+
+    def set_businessTelephone(self, value):
+        phone1 = self.phone_numbers.filter(phone_type='primary')
+        if (phone1):
+            firstOne = phone1.first()
+            firstOne.phone_number = value
+            firstOne.save()
+        else:
+            primaryType = PhoneCodeList.objects.get(code='primary')
+            phone =  OrganizationPhone(phone_type=primaryType,phone_number=value)
+            self.phone_numbers.add(phone)
+            self.save()
+
+    businessTelephone = property(get_businessTelephone,set_businessTelephone)
 
     def get_absolute_url(self):
         return reverse('organization_detail', kwargs={'pk': self.pk})

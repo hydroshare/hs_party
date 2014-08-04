@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 #from django_webtest import WebTest
 from ..models.organization import Organization
 from ..models.person import Person, OtherName,UserCodeList,PersonEmail,PersonPhone,PersonLocation
-from ..models.party_types import NameAliasCodeList
+from ..models.party_types import NameAliasCodeList,AddressCodeList,PhoneCodeList
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 
 
@@ -39,7 +39,8 @@ def PersonBasic():
     return aPerson
 
 def PersonOne():
-    aPerson = PersonCore().save()
+    aPerson = PersonCore()
+    aPerson.save()
     return aPerson
 
 def PersonTwo():
@@ -100,7 +101,57 @@ class PersonTest(TestCase):
            #person1.validate_unique()
            person2.save() # should be an error
 
+    def test_primaryAddress_get(self):
+        person1 = Person.objects.get(name="Sandy Flume")
 
+        addr = PersonLocation.objects.filter(person=person1,address_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().address, person1.primaryAddress)
+
+
+    def test_primaryAddress_set(self):
+        person1 = Person.objects.get(name="Sandy Flume")
+        ADDRESS = "setNewAddress"
+        person1.primaryAddress = ADDRESS
+        self.assertEqual(ADDRESS, person1.primaryAddress)
+
+        addr = PersonLocation.objects.filter(person=person1,address_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().address, person1.primaryAddress)
+
+    def test_primaryAddress_addnew(self):
+        self.assertIsNotNone(self.person1)
+        self.assertFalse(self.person1.primaryAddress)
+        ADDRESS = "setNewAddress"
+        address_type = AddressCodeList.objects.get(code='primary')
+        self.person1.primaryAddress = ADDRESS
+        self.assertEqual(ADDRESS, self.person1.primaryAddress)
+
+        addr = PersonLocation.objects.filter(person=self.person1,address_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().address, self.person1.primaryAddress)
+
+    def test_primaryPhone_set(self):
+        person1 = Person.objects.get(name="Sandy Flume")
+        phone = "123-123-1345"
+        person1.primaryTelephone = phone
+        self.assertEqual(phone, person1.primaryTelephone)
+
+        addr = PersonPhone.objects.filter(person=person1,phone_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().phone_number, person1.primaryTelephone)
+
+    def test_primaryPhone_addnew(self):
+        self.assertIsNotNone(self.person1)
+        self.assertFalse(self.person1.primaryTelephone)
+        phone = "123-123-1345"
+        address_type = PhoneCodeList.objects.get(code='primary')
+        self.person1.primaryTelephone = phone
+        self.assertEqual(phone, self.person1.primaryTelephone)
+
+        addr = PersonPhone.objects.filter(person=self.person1,phone_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().phone_number, self.person1.primaryTelephone)
 
 
 pass
