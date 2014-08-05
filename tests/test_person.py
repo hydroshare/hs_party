@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 #from django_webtest import WebTest
 from ..models.organization import Organization
 from ..models.person import Person, OtherName,UserCodeList,PersonEmail,PersonPhone,PersonLocation
-from ..models.party_types import NameAliasCodeList,AddressCodeList,PhoneCodeList
+from ..models.party_types import NameAliasCodeList,AddressCodeList,PhoneCodeList,EmailCodeList
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 
 
@@ -153,5 +153,52 @@ class PersonTest(TestCase):
         self.assertEqual(addr.count(),1)
         self.assertEqual(addr.first().phone_number, self.person1.primaryTelephone)
 
+    # set a primary phone, then try to add a second one.
+    def test_primaryPhone_addSecond(self):
+        self.assertIsNotNone(self.person1)
+        self.assertFalse(self.person1.primaryTelephone)
+        phone = "123-123-1345"
+        address_type = PhoneCodeList.objects.get(code='primary')
+        self.person1.primaryTelephone = phone
+        self.assertEqual(phone, self.person1.primaryTelephone)
 
-pass
+        addr = PersonPhone.objects.filter(person=self.person1,phone_type__code='primary')
+        self.assertEqual(addr.count(),1)
+        self.assertEqual(addr.first().phone_number, self.person1.primaryTelephone)
+
+
+        with self.assertRaises(ValidationError):
+            thirdOne = PersonPhone(phone_type=address_type,phone_number='001-000-1111')
+            self.person1.phone_numbers.add(thirdOne)
+            thirdOne.save()
+            self.person1.save()
+
+        with self.assertRaises(ValidationError):
+            # test object create
+            secondOne = PersonPhone.objects.create(person=self.person1,phone_type=address_type,phone_number='001-000-1111')
+
+
+    def test_primaryTelephone_addnew(self):
+        self.assertIsNotNone(self.person1)
+        self.assertFalse(self.person1.primaryTelephone)
+        ADDRESS = "setNewAddress"
+        address_type = PhoneCodeList.objects.get(code='primary')
+        self.person1.primaryTelephone = ADDRESS
+        self.assertEqual(ADDRESS, self.person1.primaryTelephone)
+
+        phones = PersonPhone.objects.filter(person=self.person1,phone_type__code='primary')
+        self.assertEqual(phones.count(),1)
+        self.assertEqual(phones.first().phone_number, self.person1.primaryTelephone)
+
+    def test_primaryEmail_addnew(self):
+        self.assertIsNotNone(self.person1)
+        self.assertFalse(self.person1.primaryEmail)
+        ADDRESS = "me@example.com"
+        address_type = EmailCodeList.objects.get(code='primary')
+        self.person1.primaryEmail = ADDRESS
+        self.assertEqual(ADDRESS, self.person1.primaryEmail)
+
+        phones = PersonEmail.objects.filter(person=self.person1,email_type__code='primary')
+        self.assertEqual(phones.count(),1)
+        self.assertEqual(phones.first().email, self.person1.primaryEmail)
+    pass

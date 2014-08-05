@@ -15,12 +15,13 @@ from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from django.core.urlresolvers import reverse
+from django.core.exceptions import NON_FIELD_ERRORS
 
 from party import Party
 from party_types import PartyEmailModel,\
     PartyGeolocation,PartyPhoneModel,\
     PartyLocationModel,ExternalIdentifierCodeList,\
-    NameAliasType,AddressCodeList,PhoneCodeList
+    NameAliasType,AddressCodeList,PhoneCodeList,EmailCodeList
 from person import Person
 
 
@@ -119,6 +120,28 @@ class Organization(Displayable,Party):
 
     businessTelephone = property(get_businessTelephone,set_businessTelephone)
 
+    def get_businessEmail(self):
+        paddr = self.email_addresses.filter(email_type='primary')
+        if (paddr):
+            return paddr.first().email
+        else:
+            return None
+
+    def set_businessEmail(self, value):
+        paddr = self.email_addresses.filter(email_type='primary')
+        if (paddr):
+            firstOne = paddr.first()
+            firstOne.email = value
+            firstOne.save()
+        else:
+            primaryType = EmailCodeList.objects.get(code='primary')
+            address =  OrganizationEmail(email_type=primaryType,email=value)
+            self.email_addresses.add(address)
+            self.save()
+
+    businessEmail = property(get_businessEmail,set_businessEmail)
+
+
     def get_absolute_url(self):
         return reverse('organization_detail', kwargs={'pk': self.pk})
 
@@ -148,6 +171,27 @@ class OrganizationEmail(PartyEmailModel):
 
     class Meta:
         app_label = 'hs_party'
+
+    def validate_unique(self, exclude=None):
+        try:
+            dupes = OrganizationEmail.objects.filter(organization=self.organization,email_type='primary')
+
+            if (dupes.count() > 1):
+                raise ValidationError(
+                     {
+                            NON_FIELD_ERRORS:
+                            ("Only one primary type allowed ",)
+                        }
+                )
+            else:
+                return
+        except ObjectDoesNotExist:
+            return
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(OrganizationEmail,self).save( *args, **kwargs)
+
     pass
 
 class OrganizationLocation(PartyLocationModel):
@@ -155,6 +199,28 @@ class OrganizationLocation(PartyLocationModel):
 
     class Meta:
         app_label = 'hs_party'
+
+    def validate_unique(self, exclude=None):
+        try:
+            dupes = OrganizationLocation.objects.filter(organization=self.organization,address_type='primary')
+
+            if (dupes.count() > 1):
+                raise ValidationError(
+                     {
+                            NON_FIELD_ERRORS:
+                            ("Only one primary type allowed ",)
+                        }
+                )
+            else:
+                return
+        except ObjectDoesNotExist:
+            return
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(OrganizationLocation,self).save( *args, **kwargs)
+
+
     pass
 
 class OrganizationPhone(PartyPhoneModel):
@@ -162,7 +228,29 @@ class OrganizationPhone(PartyPhoneModel):
 
     class Meta:
         app_label = 'hs_party'
+
+    def validate_unique(self, exclude=None):
+        try:
+            dupes = OrganizationPhone.objects.filter(organization=self.organization,phone_type='primary')
+
+            if (dupes.count() > 1):
+                raise ValidationError(
+                     {
+                            NON_FIELD_ERRORS:
+                            ("Only one primary type allowed ",)
+                        }
+                )
+            else:
+                return
+        except ObjectDoesNotExist:
+            return
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(OrganizationPhone,self).save( *args, **kwargs)
     pass
+
+
 
 class OrganizationName(NameAliasType):
     organization = models.ForeignKey(to=Organization, related_name="alternate_names", blank=True,null=True)

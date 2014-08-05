@@ -9,8 +9,23 @@
    <fieldset class="model">
 
 {%  fields_for form %}
-       <input class="btn btn-warning btn-lg" type="submit" value="Save Edits" action=""/>
+
 </fieldset>
+
+
+               <fieldset>
+                <legend>Addresses</legend>
+                {{ location_form.management_form }}
+                {{ location_form.non_form_errors }}
+                {% for lf in location_form %}
+                    {%  fields_for lf %}
+
+                {% endfor %}
+            </fieldset>
+
+
+         <input class="btn btn-warning btn-lg" type="submit" value="Save Edits" action=""/>
 </form>
+
     {% editable_loader %}
 {% endblock %}

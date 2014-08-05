@@ -393,7 +393,29 @@
             "order": "1"
 
         }
+    },
+    {
+        "pk": "503",
+        "model": "hs_party.EmailCodeList",
+        "fields": {
+            "code": "primary",
+            "name": "Primary Email",
+            "order": "99"
+
+        }
+    },
+    {
+        "pk": "504",
+        "model": "hs_party.EmailCodeList",
+        "fields": {
+            "code": "mailing list",
+            "name": "Mailing List address",
+            "order": "3"
+
+        }
     }
+
+
     ,
     {
         "pk": "600",

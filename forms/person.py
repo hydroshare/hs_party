@@ -18,7 +18,8 @@ class PersonEditorForm(ModelForm):
     OrgAssociationsFormSet = inlineformset_factory(
         Person,
         OrganizationAssociation,
-        )
+        extra=2)
+    
     class Meta:
         model = Person
         fields = ( 'name','givenName','familyName','primaryOrganizationRecord',
@@ -30,9 +31,12 @@ class PersonEditorForm(ModelForm):
         }
         labels = {
             'notes': _('Short Bio'),
+            'name': _('Full Name of Person (must be unique)'),
+            'primaryOrganizationRecord': _('Select Primary Organization'),
         }
         help_texts = {
             'notes': _('Short Biography discussing you work and interests.'),
+            'name': _('Full Name of Person that will be displayed on the site. Must be unique.'),
         }
 
     pass

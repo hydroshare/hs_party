@@ -20,11 +20,11 @@ class OrganizationAssociationEditorForm(ModelForm):
         model = OrganizationAssociation
         fields = ["person","organization","jobTitle","beginDate",
               "endDate","presentOrganization",]
-        widgets = {
-            'jobTitle': Textarea(attrs={'cols': 80, 'rows': 6}),
-        }
+        # widgets = {
+        #     'jobTitle': Textarea(attrs={'cols': 80, 'rows': 6}),
+        # }
         labels = {
-            'jobTitle': _('Short Bio'),
+            'jobTitle': _('Title of position in organization, if known'),
         }
 
     pass

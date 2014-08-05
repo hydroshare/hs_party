@@ -2,10 +2,11 @@ from __future__ import absolute_import
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 #from django_webtest import WebTest
-from ..models.organization import Organization,OrganizationCodeList,ExternalOrgIdentifier,OrganizationLocation,OrganizationPhone
+from ..models.organization import Organization,OrganizationCodeList,ExternalOrgIdentifier,\
+    OrganizationLocation,OrganizationPhone,OrganizationEmail
 from ..models.person import    Person
 from ..models.organization_association import OrganizationAssociation
-from ..models.party_types import  ExternalIdentifierCodeList,AddressCodeList,PhoneCodeList
+from ..models.party_types import  ExternalIdentifierCodeList,AddressCodeList,PhoneCodeList,EmailCodeList
 from datetime import date
 
 
@@ -127,4 +128,15 @@ class organizationTest(TestCase):
         self.assertEqual(phones.count(),1)
         self.assertEqual(phones.first().phone_number, self.org2.businessTelephone)
 
-pass
+    def test_businessEmail_addnew(self):
+        self.assertIsNotNone(self.org2)
+        self.assertFalse(self.org2.businessEmail)
+        ADDRESS = "me@example.com"
+        address_type = EmailCodeList.objects.get(code='primary')
+        self.org2.businessEmail = ADDRESS
+        self.assertEqual(ADDRESS, self.org2.businessEmail)
+
+        phones = OrganizationEmail.objects.filter(organization=self.org2,email_type__code='primary')
+        self.assertEqual(phones.count(),1)
+        self.assertEqual(phones.first().email, self.org2.businessEmail)
+    pass
