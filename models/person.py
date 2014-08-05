@@ -20,7 +20,7 @@ from party import Party
 from party_types import PartyEmailModel,PartyGeolocation,\
     PartyPhoneModel,PartyLocationModel,\
     ExternalIdentifierCodeList,\
-    NameAliasType, AddressCodeList,PhoneCodeList
+    NameAliasType, AddressCodeList,PhoneCodeList,EmailCodeList
 
 
 
@@ -103,6 +103,27 @@ class Person(Displayable,Party):
 
     primaryTelephone = property(get_primaryTelephone,set_primaryTelephone)
 
+    def get_primaryEmail(self):
+        paddr = self.email_addresses.filter(email_type='primary')
+        if (paddr):
+            return paddr.first().email
+        else:
+            return None
+
+    def set_primaryEmail(self, value):
+        paddr = self.email_addresses.filter(email_type='primary')
+        if (paddr):
+            firstOne = paddr.first()
+            firstOne.email = value
+            firstOne.save()
+        else:
+            primaryType = EmailCodeList.objects.get(code='primary')
+            address =  PersonEmail(email_type=primaryType,email=value)
+            self.email_addresses.add(address)
+            self.save()
+
+    primaryEmail = property(get_primaryEmail,set_primaryEmail)
+
     def get_absolute_url(self):
         return reverse('person_detail', kwargs={'pk': self.pk})
 
@@ -184,6 +205,18 @@ class Person(Displayable,Party):
                             ("Family Name, or Given Name must be provided",)
                             }
                         )
+    def clean_phone_numbers(self):
+        super(Person, self).clean()
+        p = self
+        if (not self.phone_numbers):
+            primaryNumbers = self.phone_numbers.filter(phone_type='primary')
+            if (primaryNumbers.count() >1):
+                raise ValidationError(
+                    {
+                    "phone_numbers":
+                    ("There can only be one primary phone number",)
+                    }
+                )
 
     def __unicode__(self):
         return self.name
@@ -208,6 +241,25 @@ class PersonLocation(PartyLocationModel):
     class Meta:
         """Meta Class for your model."""
         app_label = 'hs_party'
+    def validate_unique(self, exclude=None):
+        try:
+            dupes = PersonLocation.objects.filter(person=self.person,address_type='primary')
+
+            if (dupes.count() > 1):
+                raise ValidationError(
+                     {
+                            NON_FIELD_ERRORS:
+                            ("Only one primary. ",)
+                        }
+                )
+            else:
+                return
+        except ObjectDoesNotExist:
+            return
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(PersonLocation,self).save( *args, **kwargs)
     pass
 
 class PersonPhone(PartyPhoneModel):
@@ -216,6 +268,26 @@ class PersonPhone(PartyPhoneModel):
     class Meta:
         """Meta Class for your model."""
         app_label = 'hs_party'
+
+    def validate_unique(self, exclude=None):
+        try:
+            dupes = PersonPhone.objects.filter(person=self.person,phone_type='primary')
+
+            if (dupes.count() > 1):
+                raise ValidationError(
+                     {
+                            NON_FIELD_ERRORS:
+                            ("Only one primary. ",)
+                        }
+                )
+            else:
+                return
+        except ObjectDoesNotExist:
+            return
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(PersonPhone,self).save( *args, **kwargs)
     pass
 
 

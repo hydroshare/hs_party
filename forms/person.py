@@ -19,7 +19,7 @@ class PersonEditorForm(ModelForm):
         Person,
         OrganizationAssociation,
         extra=2)
-    
+
     class Meta:
         model = Person
         fields = ( 'name','givenName','familyName','primaryOrganizationRecord',

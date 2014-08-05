@@ -7,7 +7,8 @@
    <div class='row'>
    <form enctype="multipart/form-data" method="post" action="">
    <fieldset class="model">
-
+                {{ form.management_form }}
+                {{ form.non_form_errors }}
 {%  fields_for form %}
 
 </fieldset>
@@ -22,7 +23,42 @@
 
                 {% endfor %}
             </fieldset>
+               <fieldset>
+                <legend>Phone</legend>
+                {{ phone_form.management_form }}
+                {{ phone_form.non_form_errors }}
+                {% for lf in phone_form %}
+                    {%  fields_for lf %}
 
+                {% endfor %}
+            </fieldset>
+                  <fieldset>
+                <legend>email</legend>
+                {{ email_form.management_form }}
+                {{ email_form.non_form_errors }}
+                {% for lf in email_form %}
+                    {%  fields_for lf %}
+
+                {% endfor %}
+            </fieldset>
+                  <fieldset>
+                <legend>name</legend>
+                {{ name_form.management_form }}
+                {{ name_form.non_form_errors }}
+                {% for lf in name_form %}
+                    {%  fields_for lf %}
+
+                {% endfor %}
+            </fieldset>
+                  <fieldset>
+                <legend>Addresses</legend>
+                {{ identifier_form.management_form }}
+                {{ identifier_form.non_form_errors }}
+                {% for lf in identifier_form %}
+                    {%  fields_for lf %}
+
+                {% endfor %}
+            </fieldset>
 
          <input class="btn btn-warning btn-lg" type="submit" value="Save Edits" action=""/>
 </form>

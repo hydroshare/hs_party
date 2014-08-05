@@ -184,7 +184,7 @@ class NameAliasCodeList(CodeListType):
 class NameAliasType(models.Model):
     #ID = models.AutoField(primary_key=True)
     # relation will show in Party as otherNames
-    otherName = models.CharField(verbose_name="Other Name or alias",max_length='255')
+    otherName = models.CharField(verbose_name="Other Name or alias",max_length='255',blank=True)
     ANNOTATION_TYPE_CHOICE = (
         ("change", "Name Change"),
         ("citation", "Publishing Alias"),
