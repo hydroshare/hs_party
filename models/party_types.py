@@ -191,7 +191,7 @@ class NameAliasType(models.Model):
         ("fullname", "Full Name variation"),
         ("other", "other type of alias")
     )
-    annotation = models.ForeignKey(NameAliasCodeList,verbose_name="type of alias", default=700,max_length='10')
+    annotation = models.ForeignKey(NameAliasCodeList,verbose_name="type of alias",max_length='10')
 
 
 

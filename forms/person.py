@@ -5,7 +5,8 @@ from django import forms
 from django.forms.models import inlineformset_factory
 
 from ..models.organization import Organization
-from ..models.person import Person
+from ..models.person import Person,PersonLocation,PersonExternalIdentifier,\
+    PersonPhone,PersonEmail,OtherName
 from ..models.organization_association import OrganizationAssociation
 
 from django.contrib.auth.models import User, Group
@@ -15,10 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 
 # intial form
 class PersonEditorForm(ModelForm):
-    OrgAssociationsFormSet = inlineformset_factory(
-        Person,
-        OrganizationAssociation,
-        extra=2)
+
 
     class Meta:
         model = Person
@@ -41,7 +39,31 @@ class PersonEditorForm(ModelForm):
 
     pass
 
+LocationFormSet = inlineformset_factory(
+    Person,
+    PersonLocation,
+    extra=2,)
+EmailFormSet = inlineformset_factory(
+    Person,
+    PersonEmail,
+    extra=2,)
+PhoneFormSet = inlineformset_factory(
+    Person,
+    PersonPhone,
+    extra=2,)
+NameFormSet = inlineformset_factory(
+    Person,
+    OtherName,
+    extra=2,)
+IdentifierFormSet = inlineformset_factory(
+    Person,
+    PersonExternalIdentifier,
+    extra=2,)
 
+OrgAssociationsFormSet = inlineformset_factory(
+    Person,
+    OrganizationAssociation,
+    extra=2)
 #
 # class PersonForm(ModelForm):
 #     class Meta:

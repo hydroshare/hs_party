@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView,TemplateView
 
 from . import  views, models
 from .views.organization import OrganizationDetail,OrganizationList,OrganizationEdit,OrganizationCreate
@@ -40,6 +40,11 @@ urlpatterns += patterns('hs_party.views.organizationassociation',
         url(r'^association/add/$', OrganizationAssociationCreate.as_view(), name="association_add"),
          url(r'^association/(?P<pk>\d+)/$', OrganizationAssociationDetail.as_view( template_name = "pages/associations/organization_association.html"), name="association_detail"),
         url(r'^association/(?P<pk>\d+)/edit/$', OrganizationAssociationEdit.as_view(template_name = "pages/associations/organization_association_edit.html"), name="association_edit"),
+ )
+
+urlpatterns += patterns('',
+
+ url(r'^$', TemplateView.as_view(template_name='pages/index_party.html'), name="party_home"),
  )
 
 
