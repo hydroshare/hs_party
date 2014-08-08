@@ -22,16 +22,21 @@ __author__ = 'valentin'
 party_v1_api = Api(api_name='v1')
 
 class PersonResource(ModelResource):
-    #member_of = fields.ForeignKey('hs_party.api.OrganizationAssociationResource','organizationassociation_set')
+    member_of = fields.ToManyField('hs_party.api.OrganizationAssociationResource','organizationassociation_set')
 
     class Meta:
-        always_return_data = True
         queryset = Person.objects.all()
         resource_name = 'person'
+        collection_name ='people'
+        always_return_data = True
+        #include_absolute_url = True #need to add get_absolute_url
         serializer=PersonFoafSerializer()
-        excludes = ['createdDate', 'lastUpdate','_meta_title','status',
-         'expiry_date',   'gen_description',   'in_sitemap' ,
-        'keywords_string','publish_date','slug','updated' ]
+        # exclude displayable properties, and management dates
+        excludes = ['createdDate', 'lastUpdate',
+              'created','_meta_title','status','description',
+              'expiry_date',   'gen_description',   'in_sitemap' ,
+              'keywords_string','publish_date','slug','updated'
+        ]
         #excludes = ['createdDate', 'lastUpdate']
         #filtering = {
         #    'name': ALL,
@@ -48,13 +53,18 @@ party_v1_api.register(PersonResource())
 class OrganizationResource(ModelResource):
 
     class Meta:
-        always_return_data = True
-        queryset = Organization.objects.all()
         resource_name = 'organization'
+        queryset = Organization.objects.all()
+        collection_name ='organizations' # without this name is object
+        always_return_data = True
+        #include_absolute_url = True #need to add get_absolute_url
         serializer=OrganizationFFoafSerializer()
-        excludes = ['createdDate', 'lastUpdate','_meta_title','status',
-         'expiry_date',   'gen_description',   'in_sitemap' ,
-        'keywords_string','publish_date','slug','updated' ]
+        # exclude displayable properties, and management dates
+        excludes = ['createdDate', 'lastUpdate',
+              'created','_meta_title','status','description',
+              'expiry_date',   'gen_description',   'in_sitemap' ,
+              'keywords_string','publish_date','slug','updated'
+        ]
         filtering = {
             'name': ALL,
         }
@@ -68,18 +78,22 @@ class OrganizationResource(ModelResource):
 party_v1_api.register(OrganizationResource())
 
 class OrganizationAssociationResource(ModelResource):
-    person = fields.ForeignKey(PersonResource,'person')
-    organization = fields.ForeignKey(OrganizationResource,'organization')
+    person = fields.ForeignKey(PersonResource,'person', full_detail=True)
+    organization = fields.ForeignKey(OrganizationResource,'organization',full_detail=True)
 
     class Meta:
-        always_return_data = True
         queryset = OrganizationAssociation.objects.all()
         resource_name = 'organization_association'
+        collection_name ='organization_associations' # without this name is object
+
+        always_return_data = True
+        #include_absolute_url = True #need to add get_absolute_url
         serializer=OrganizationAssociationFoafSerializer()
-        excludes = ['createdDate', ]
-        filtering = {
-            'name': ALL,
-        }
+        # excludes = ['createdDate',
+        #             ]
+        # filtering = {
+        #     'name': ALL,
+        # }
 
         #authentication = MultiAuthentication(BasicAuthentication(), ApiKeyAuthentication(), SessionAuthentication())
         # make it so only superusers and people with express permission can modify / create user objects
@@ -94,13 +108,17 @@ class OrganizationalCodeListResource(ModelResource):
     class Meta:
         always_return_data = True
         queryset = OrganizationCodeList.objects.all()
-        resource_name = 'organization_types'
+        resource_name = 'organization_type'
+        collection_name = 'organization_types'
         filtering = {
             'name': ALL,
         }
-        excludes = ['createdDate', 'lastUpdate','_meta_title','status',
-         'expiry_date',   'gen_description',   'in_sitemap' ,
-        'keywords_string','publish_date','slug','updated' ]
+        # exclude displayable properties, and management dates
+        excludes = ['createdDate', 'lastUpdate',
+              'created','_meta_title','status','description',
+              'expiry_date',   'gen_description',   'in_sitemap' ,
+              'keywords_string','publish_date','slug','updated'
+        ]
         #authentication = MultiAuthentication(BasicAuthentication(), ApiKeyAuthentication(), SessionAuthentication())
         # make it so only superusers and people with express permission can modify / create group objects
         #authorization = DjangoAuthorization()

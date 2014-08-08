@@ -12,10 +12,11 @@ from ..models.person import Person
 from ..models.organization_association import  OrganizationAssociation
 
 
-from ..api import PersonResource,OrganizationResource
+from ..api import PersonResource,OrganizationResource,OrganizationAssociationResource
 
 from datetime import date
 from django.test.utils import override_settings
+from tastypie.test import ResourceTestCase
 
 try:
     from urllib.parse import urlparse
@@ -27,7 +28,7 @@ from mezzanine.conf import settings
 __author__ = 'valentin'
 
 
-class PartyApiTests(TestCase):
+class PartyApiTests(ResourceTestCase):
     fixtures =['initial_data.json']
     # should be able to do this, but
     # issue: need to override base page or you see this error
@@ -48,12 +49,12 @@ class PartyApiTests(TestCase):
     #     #self.assertEqual(response.status_code, 200)
 
     def test_organizational_code_list_api(self):
-        plist = reverse('api_dispatch_list', kwargs={'resource_name': 'organization_types','api_name':'v1'})
+        plist = reverse('api_dispatch_list', kwargs={'resource_name': 'organization_type','api_name':'v1'})
         response = self.client.get(plist)
         self.assertEqual(response.status_code, 200)
 
     def test_organizational_code_list_api(self):
-        plist = reverse('api_dispatch_list', kwargs={'resource_name': 'organization_types','api_name':'v1'})
+        plist = reverse('api_dispatch_list', kwargs={'resource_name': 'organization_type','api_name':'v1'})
         response = self.client.get(plist)
         self.assertEqual(response.status_code, 200)
 
@@ -129,7 +130,30 @@ class PartyApiTests(TestCase):
         xml_response = ares.serialize(None,ares.full_dehydrate(ares_bundle),'application/rdf+xml')
         print xml_response
 
-        self.assertIn('<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/prganization"/>', xml_response)
+        self.assertIn('<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/organization"/>', xml_response)
+        self.assertIn('<foaf:name>org2</foaf:name>' , xml_response)
+        self.assertIn('<foaf:img rdf:resource="http://www.example.com"/>' , xml_response)
+
+        # force fail for a while
+        self.assertIn('xxxx' , xml_response)
+
+    def test_organization_association_rdf(self):
+
+        ares = OrganizationAssociationResource(api_name='v1')
+        request = HttpRequest()
+        request.method = 'GET'
+
+
+        #person = ares.obj_get( pk=self.aPerson.pk)
+        #org = Organization.objects.get(pk=self.org2.pk)
+        org = OrganizationAssociation.objects.get(organization__name="Default Organization")
+        #ares_bundle = ares.build_bundle(obj=person,request=request)
+        ares_bundle = ares.build_bundle(obj=org)
+        ares_bundle = ares.full_dehydrate(ares_bundle) # not inline to help in debugging
+        xml_response = ares.serialize(None,ares_bundle,'application/rdf+xml')
+        print xml_response
+
+        self.assertIn('<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/organization"/>', xml_response)
         self.assertIn('<foaf:name>org2</foaf:name>' , xml_response)
         self.assertIn('<foaf:img rdf:resource="http://www.example.com"/>' , xml_response)
 
