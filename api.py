@@ -22,7 +22,7 @@ __author__ = 'valentin'
 party_v1_api = Api(api_name='v1')
 
 class PersonResource(ModelResource):
-    member_of = fields.ToManyField('hs_party.api.OrganizationAssociationResource','organizationassociation_set')
+    memberOf = fields.ToManyField('hs_party.api.OrganizationAssociationResource','organizationassociation_set')
 
     class Meta:
         queryset = Person.objects.all()

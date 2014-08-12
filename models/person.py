@@ -49,7 +49,8 @@ class Person(Displayable,Party):
     #primaryOrganizationName = models.CharField(max_length='100', blank=True, verbose_name="Primary Organization", help_text="Primary Organization, if known")
     #primaryAddress = models.CharField(max_length='100', blank=True, verbose_name="Primary Address", help_text="Primary Mailing or Street, if known")
     #primaryTelephone = models.CharField(max_length='30', blank=True, verbose_name="Primary Telephone",help_text="Primary Telephone, if known")
-    primaryOrganizationRecord = models.ForeignKey('Organization', null=True, blank=True,related_name="+")
+    primaryOrganizationRecord = models.ForeignKey('Organization',  verbose_name="Primary Organization",
+                                                  null=True, blank=True,related_name="+")
 
     #@property
     def get_primaryOrganizationName(self):
@@ -129,8 +130,6 @@ class Person(Displayable,Party):
 
     def __init__(self, *args, **kwargs):
         super(Person, self).__init__(*args, **kwargs)
-        if self.givenName is not None and self.familyName is not None:
-            self.name = self.givenName + ' ' + self.familyName
         nameField = self._meta.get_field('name')
         nameField.verbose_name="Name of Person"
         nameField.help_text="Name You would like to be displayed"
@@ -140,7 +139,7 @@ class Person(Displayable,Party):
         urlField = self._meta.get_field('url')
         urlField.verbose_name="Personal Web Page"
         urlField.help_text="Web page that describes you, or your work"
-        super(Person, self).__init__(*args, **kwargs)
+
 
 
     def create(self, *args, **kwargs):

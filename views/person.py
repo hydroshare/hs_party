@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
+from uuid import uuid4
 
 from ..models.person import Person
 from ..models.organization import Organization
@@ -15,7 +16,7 @@ from django.forms.models import inlineformset_factory
 
 
 
-from ..forms.person import PersonEditorForm
+from ..forms.person import PersonEditorForm,PersonCreateForm
 from ..forms.person import LocationFormSet,EmailFormSet,PhoneFormSet,IdentifierFormSet,NameFormSet
 from ..forms.person import OrgAssociationsFormSet
 
@@ -39,12 +40,16 @@ class PersonList(ListView):
 
 #@login_required
 class PersonCreate(CreateView):
+
     model = Person
     template_name = "pages/person/person_create.html"
     fields = ["name",'givenName','familyName',
              'primaryOrganizationRecord',
             # 'primaryAddress',
               'notes']
+    form_class = PersonCreateForm
+
+
 
 #@login_required
 class PersonEdit(UpdateView):
@@ -67,6 +72,8 @@ class PersonEdit(UpdateView):
         email_form = EmailFormSet()
         phone_form = PhoneFormSet()
         identifier_form = IdentifierFormSet()
+       # orgs_form = OrgAssociationsFormSet(queryset=OrganizationAssociation.objects.filter(person__pk=self.kwargs['pk']),)
+
 
         return self.render_to_response(
             self.get_context_data(form=form,
@@ -75,6 +82,7 @@ class PersonEdit(UpdateView):
                                   email_form=email_form,
                                   phone_form=phone_form,
                                   identifier_form=identifier_form,
+#                                  orgs_form=orgs_form
                                   )
         )
 
@@ -92,16 +100,25 @@ class PersonEdit(UpdateView):
         email_form = EmailFormSet(self.request.POST)
         phone_form = PhoneFormSet(self.request.POST)
         identifier_form = IdentifierFormSet(self.request.POST)
+#        orgs_form = OrgAssociationsFormSet(self.request.POST)
 
         if ( form.is_valid() and location_form.is_valid()
         and email_form.is_valid() and name_form.is_valid()
-        and phone_form.is_valid() and identifier_form.is_valid() ):
+        and phone_form.is_valid() and identifier_form.is_valid()
+#        and orgs_form.is_valid()
+        ):
 
-            return self.form_valid(form, location_form, email_form, name_form, phone_form, identifier_form)
+            return self.form_valid(form, location_form, email_form, name_form, phone_form, identifier_form
+#                                   ,orgs_form
+            )
         else:
-            return self.form_invalid(form, location_form, email_form, name_form, phone_form, identifier_form)
+            return self.form_invalid(form, location_form, email_form, name_form, phone_form, identifier_form
+#                                     ,orgs_form
+            )
 
-    def form_valid(self, form, location_form, email_form, name_form, phone_form, identifier_form):
+    def form_valid(self, form, location_form, email_form, name_form, phone_form, identifier_form
+#                   ,orgs_form
+    ):
         """
         Called if all forms are valid. Creates a Recipe instance along with
         associated Ingredients and Instructions and then redirects to a
@@ -119,9 +136,14 @@ class PersonEdit(UpdateView):
         identifier_form.instance = self.object
         identifier_form.save()
 
+#        orgs_form.instance=self.object
+#        orgs_form.save()
+
         return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, form, location_form, email_form, name_form, phone_form, identifier_form):
+    def form_invalid(self, form, location_form, email_form, name_form, phone_form, identifier_form
+#                     ,orgs_form
+    ):
         """
         Called if a form is invalid. Re-renders the context data with the
         data-filled forms and errors.
@@ -132,7 +154,9 @@ class PersonEdit(UpdateView):
                                   name_form=name_form,
                                   email_form=email_form,
                                   phone_form=phone_form,
-                                  identifier_form=identifier_form,))
+                                  identifier_form=identifier_form,
+#                                  orgs_form=orgs_form
+            ))
 
     pass
 

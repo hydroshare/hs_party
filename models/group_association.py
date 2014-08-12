@@ -24,19 +24,16 @@ from .organization import Organization
 
 __author__ = 'valentin'
 
-class OrganizationAssociation( ActivitiesModel):
+class GroupAssociation( ActivitiesModel):
     # object to handle a person being in one or more organizations
     #organization = models.ForeignKey(Organization)
-    #uniqueCode = models.CharField(max_length=64,default=lambda: str(uuid4()),verbose_name="A unique code for the record", help_text="A unique code for the record")
-    uniqueCode = models.CharField(max_length=64,verbose_name="A unique code for the record", help_text="A unique code for the record",blank=True)
-    organization = models.ForeignKey(Organization)
+    uniqueCode = models.CharField(max_length=64,default=lambda: str(uuid4()),verbose_name="A unique code for the record", help_text="A unique code for the record")
+    group = models.ForeignKey(Group)
     #person = models.ForeignKey(Person)
     person = models.ForeignKey(Person)
     beginDate = models.DateField(null=True,blank=True,verbose_name="begin date of associate, Empty is not know.")
-    endDate = models.DateField(null=True,blank=True, verbose_name="End date of association. Empty if still with organization")
-    jobTitle = models.CharField(verbose_name="Title, empty is not known", blank=True,max_length='100')
-    presentOrganization = models.BooleanField(verbose_name="Presently with Organization", default=True,
-                                  help_text="You are presently a member of this Organization")
+    endDate = models.DateField(null=True,blank=True, verbose_name="End date of association. Empty if still with group")
+    positionName = models.CharField(verbose_name="Position, empty is not known", blank=True,max_length='100')
 
     def __unicode__(self):
         if (self.beginDate):
@@ -51,13 +48,7 @@ class OrganizationAssociation( ActivitiesModel):
         if (self.jobTitle):
             title = ' ,' + self.jobTitle
 
-        return u'%s (%s%s%s)' % (self.person.name, self.organization.name,title,range)
+        return u'%s (%s%s%s)' % (self.person.name, self.group.name,title,range)
 
     class Meta:
         app_label = 'hs_party'
-
-    def clean_uniqueCode(self):
-        if not self.uniqueCode:
-            self.uniqueCode = str(uuid4())
-
-

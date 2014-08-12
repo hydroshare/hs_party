@@ -14,6 +14,7 @@ class PersonFoafSerializer(Serializer):
         'rdf':'application/rdf+xml'
 
     }
+    schemaOrg = Namespace('http://www.schema.org/')
 
 # <rdf:RDF
 #       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -43,12 +44,15 @@ class PersonFoafSerializer(Serializer):
 # <foaf:mbox_sha1sum>4b6fc3561c8148a690e462624c8a8eb8ebac30a7</foaf:mbox_sha1sum></foaf:Person></foaf:knows></foaf:Person>
 # </rdf:RDF>
     def to_rdf(self, data, options=None):
+        pObject = data.obj
         data = self.to_simple(data, options)
+
 
         g = Graph()
         g.bind('dc',DC)
         g.bind('dc',DCTERMS)
         g.bind('foaf',FOAF)
+        g.bind('schema',self.schemaOrg)
 
         person = URIRef(data['resource_uri'])
         g.add( (person,RDF.type,FOAF.person) )
@@ -61,6 +65,14 @@ class PersonFoafSerializer(Serializer):
             g.add( (person,FOAF.familyName,Literal("last") ) )
         if (data['notes']):
             g.add( (person,DC.description,Literal(data['notes']) ) )
+
+        if (data['memberOf']):
+            for p in data['memberOf'] :
+                g.add( (person,self.schemaOrg.memberOf,URIRef(p ) ) )
+
+        # if (pObject.memberOf):
+        #     for p in pObject.memberOf :
+        #         g.add( (person,self.schemaOrg.memberOf,Literal(p['resource_uri'] ) ) )
 
         # if (data['email_addresses']):
         #     g.add( (person,FOAF.mbox,URIRef("mailto:me@example.com")) )

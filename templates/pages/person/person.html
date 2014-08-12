@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load  pages_tags mezzanine_tags %}
+{% load  pages_tags mezzanine_tags  crispy_forms_tags %}
 
 {% block main %}
 
@@ -11,14 +11,14 @@
 <a class="btn btn-default" href="{%  url 'api_dispatch_detail' resource_name='person'  api_name='v1' pk=person.pk %}?format=json">JSON</a>
 <a class="btn btn-default" href="{%  url 'api_dispatch_detail' resource_name='person'  api_name='v1' pk=person.pk %}?format=rdf">RDF</a>
 
-    <table class="table">
+    <table class="table" vocab="http://schema.org/" typeof="Person">
  <tr>
      <td>Family Name</td>
      <td>{{ person.familyName }}</td>
  </tr>
   <tr>
      <td>First or Given Name</td>
-     <td>{{ person.givenName }}</td>
+     <td property="giveName">{{ person.givenName }}</td>
  </tr>
   {%  if person.otherNames %}
     <tr>
@@ -26,15 +26,15 @@
      <td><table>
          {%  for n in  person.otherNames.all %}
          <tr>
-         <td>{{ n.otherName }}</td><th> ({{ n.annotation.name }})</th></tr>
+         <td property="alternateName">{{ n.otherName }}</td><th> ({{ n.annotation.name }})</th></tr>
      {% endfor %}
      </table></td>
  </tr>
  {% endif %}
   <tr>
      <td>Primary Organization</td>
-     <td> {%  if person.primaryOrganizationRecord %}
-         <a href="{%   url 'organization_detail' person.primaryOrganizationRecord.pk %} ">
+     <td property="worksFor"> {%  if person.primaryOrganizationRecord %}
+         <a  href="{%   url 'organization_detail' person.primaryOrganizationRecord.pk %} ">
                            {{ person.primaryOrganizationRecord.name }}
          {% endif %}
          </a>
@@ -42,7 +42,7 @@
  </tr>
   <tr>
      <td>Job Title</td>
-     <td>{{ person.jobTitle }}</td>
+     <td property="jobTitle">{{ person.jobTitle }}</td>
  </tr>
 {% comment %}   <tr>
      <td>Primary Address</td>
@@ -51,11 +51,11 @@
 {% endcomment %}
  {%  if person.mail_addresses %}
     <tr>
-     <td>Other Address</td>
+     <td>email Address</td>
      <td><table>
          {%  for add in person.mail_addresses.all %}
-         <tr>
-         <td>{{ add.address }}</td><th> ({{ add.address_type.name }})</th></tr>
+         <tr itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+         <td >{{ add.address }}</td><th> ({{ add.address_type.name }})</th></tr>
      {% endfor %}
      </table></td>
  </tr>
@@ -74,7 +74,7 @@
          {%  for o in person.phone_numbers.all %}
          <tr>
          <td>{{ o.phone_number }}</td>
-         <th>({{ o.phone_type.name }})</th>
+         <th property="phone">({{ o.phone_type.name }})</th>
          </tr>
      {% endfor %}
      </table></td>
@@ -83,24 +83,24 @@
    {%  if person.email_addresses %}
     <tr>
      <td>Email Contacts</td>
-     <td><table>
+     <td><table >
          {%  for o in person.email_addresses.all %}
-         <tr>
-         <td>{{ o.email }}</td>
+         <tr property="email">
+         <td >{{ o.email }}</td>
              <th>({{ o.email_type.name }})</th>
          </tr>
      {% endfor %}
      </table></td>
  </tr>
  {% endif %}
-  <tr>
+  <tr property="description">
      <td>Biography or Short Note</td>
      <td>{{ person.notes }}</td>
  </tr>
 
  <tr>
      <td>Personal or Project Web Page</td>
-     <td>{{ person.url }}</td>
+     <td property="url">{{ person.url }}</td>
  </tr>
   <tr>
      <td>Added</td>

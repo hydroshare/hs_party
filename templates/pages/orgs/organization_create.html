@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load  pages_tags mezzanine_tags %}
+{% load  pages_tags mezzanine_tags crispy_forms_tags %}
 
 {% block main %}
 <h1>New Organization</h1>
@@ -9,7 +9,7 @@
 
     {% csrf_token %}
  <fieldset class="model">
-     {%  fields_for form %}
+     {%  crispy form %}
      </fieldset>
 
 <input type="submit"/>

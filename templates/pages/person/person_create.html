@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load  pages_tags mezzanine_tags %}
+{% load  pages_tags mezzanine_tags crispy_forms_tags %}
 
 {% block main %}
 <h1>Add Person</h1>
@@ -8,10 +8,8 @@
 <form enctype="multipart/form-data" method="post" action="">
 <table>
     {% csrf_token %}
-    {{  form }}
-    {% for forms in formset %}
-        {{ forms.name }}
-    {% endfor %}
+    {%  crispy form %}
+
 </table>
 
 <input type="submit"/>
