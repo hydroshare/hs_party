@@ -31,7 +31,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class PersonList(ListView):
     model = Person
     #template_name = "pages/person/person_list.html"
-    queryset = Person.objects.all()
+    queryset = Person.objects.prefetch_related('primaryOrganizationRecord').all()
 
     def get_context_data(self, **kwargs):
         context = super(PersonList, self).get_context_data(**kwargs)
@@ -59,12 +59,13 @@ class PersonEdit(UpdateView):
 
 
 
+
     def get(self, request, *args, **kwargs):
         """
         Handles GET requests and instantiates blank versions of the form
         and its inline formsets.
         """
-        self.object = Person.objects.get(pk=self.kwargs['pk'])
+        self.object = Person.objects.select_related().get(pk=self.kwargs['pk'])
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         location_form = LocationFormSet()
@@ -92,7 +93,7 @@ class PersonEdit(UpdateView):
         formsets with the passed POST variables and then checking them for
         validity.
         """
-        self.object = Person.objects.get(pk=self.kwargs['pk'])
+        self.object = Person.objects.select_related().get(pk=self.kwargs['pk'])
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         location_form = LocationFormSet(self.request.POST)
@@ -162,7 +163,8 @@ class PersonEdit(UpdateView):
 
 class PersonDetail(DetailView):
     model = Person
-    queryset = Person.objects.all()
+    # examples of detail view use all()
+    queryset = Person.objects.select_related().all()
     #template_name = "pages/person/person.html"
 
     def get_context_data(self, **kwargs):

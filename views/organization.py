@@ -20,6 +20,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class OrganizationList(ListView):
     model = Organization
     template_name = "pages/orgs/organization_list.html"
+    queryset = Organization.objects.prefetch_related('parentOrganization','organizationType').all()
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationList, self).get_context_data(**kwargs)
@@ -44,7 +45,7 @@ class OrganizationEdit(UpdateView):
         Handles GET requests and instantiates blank versions of the form
         and its inline formsets.
         """
-        self.object = Organization.objects.get(pk=self.kwargs['pk'])
+        self.object = Organization.objects.select_related().get(pk=self.kwargs['pk'])
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         location_form = LocationFormSet()
@@ -69,7 +70,7 @@ class OrganizationEdit(UpdateView):
         formsets with the passed POST variables and then checking them for
         validity.
         """
-        self.object = Organization.objects.get(pk=self.kwargs['pk'])
+        self.object = Organization.objects.select_related().get(pk=self.kwargs['pk'])
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         location_form = LocationFormSet(self.request.POST)
@@ -129,7 +130,7 @@ class OrganizationCreate(CreateView):
 
 class OrganizationDetail(DetailView):
     model = Organization
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.select_related().all()
     template_name = "pages/orgs/organization.html"
 
     def get_context_data(self, **kwargs):

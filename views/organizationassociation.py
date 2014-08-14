@@ -32,7 +32,7 @@ class OrganizationAssociationCreate(CreateView):
 
 class OrganizationAssociationDetail(DetailView):
     model = OrganizationAssociation
-    queryset = OrganizationAssociation.objects.all()
+    queryset = OrganizationAssociation.objects.select_related().all()
     template_name = "pages/associations/organization_association.html"
 
     def get_context_data(self, **kwargs):
